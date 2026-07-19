@@ -88,3 +88,9 @@ Checked 24 files. 0 errors, 0 warnings. All files pass.
 
 ---
 
+## 2026-07-19T20:01:02Z — Ingested: 3 ADRs & 1 Master Doc
+
+Created Wiki/ADR-Template-Engine-Strategy.md, Wiki/ADR-Git-Hygiene-and-Version-Control.md, Wiki/ADR-Agent-Pointer-Routing.md, and Wiki/CoreBrain-Architecture-Overview.md. Marked sources processed.
+
+---
+
