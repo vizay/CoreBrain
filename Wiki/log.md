@@ -28,3 +28,9 @@ Fixed 0 error(s). Warnings: 0. All 5 files pass: FastAPI.md, Pydantic.md, Starle
 
 ---
 
+## 2026-07-19T17:55:11Z — Ingested: Why LLM Wiki, llm-wiki (Karpathy), How To Build LLM Wiki, vibe-coding setup v1.0.0
+
+Created 7 wiki notes: LLM-Wiki, Knowledge-Graph, RAG, Graph-RAG, Raw-Wiki-Schema-Architecture, Hub-Spoke-Architecture, Wanderloots. Sources: 4 files marked processed: true.
+
+---
+
