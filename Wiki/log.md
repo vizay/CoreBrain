@@ -64,3 +64,9 @@ Created Wiki/Architecturally-Significant-Requirement.md. Updated Wiki/Architectu
 
 ---
 
+## 2026-07-19T19:07:47Z — Ingested: Software architecture
+
+Created Wiki/Software-Architecture.md. Marked source processed.
+
+---
+
