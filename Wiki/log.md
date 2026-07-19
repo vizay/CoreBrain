@@ -40,3 +40,9 @@ Fixed 0 error(s). Warnings: 3. All files pass.
 
 ---
 
+## 2026-07-19T18:36:44Z — Ingested: ADR Sources
+
+Created 6 wiki notes: Architectural Decision, Architectural Decision Record, MADR, AD Definition of Ready, AD Definition of Done, ADR Adoption and Practices. Sources: 14 raw files marked processed: true.
+
+---
+
