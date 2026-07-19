@@ -1,0 +1,363 @@
+#!/usr/bin/env python3
+"""
+wiki_tool.py — Deterministic engine for the CoreBrain LLM Wiki Vault.
+
+Commands:
+  build           Scan Wiki/ and regenerate Wiki/catalog.jsonl
+  lint            Validate all Wiki/ .md files (frontmatter, tags, sources, Core refs)
+  search-catalog  Search catalog.jsonl with --query
+  log             Append a timestamped entry to Wiki/log.md
+
+Usage:
+  python scripts/wiki_tool.py build
+  python scripts/wiki_tool.py lint
+  python scripts/wiki_tool.py search-catalog --query "transformer"
+  python scripts/wiki_tool.py log --action "Ingested GPT-4 paper" --details "Added 3 wiki notes"
+
+Dependencies: Python 3.8+ standard library only (os, json, argparse, re, pathlib, datetime).
+"""
+
+import os
+import json
+import argparse
+import re
+import sys
+from pathlib import Path
+from datetime import datetime, timezone
+
+# ---------------------------------------------------------------------------
+# Path anchors — all paths are relative to the vault root (parent of scripts/)
+# ---------------------------------------------------------------------------
+SCRIPT_DIR = Path(__file__).resolve().parent
+VAULT_ROOT = SCRIPT_DIR.parent
+WIKI_DIR = VAULT_ROOT / "Wiki"
+RAW_SOURCES_DIR = VAULT_ROOT / "Raw" / "Sources"
+CATALOG_FILE = WIKI_DIR / "catalog.jsonl"
+LOG_FILE = WIKI_DIR / "log.md"
+
+# ---------------------------------------------------------------------------
+# YAML frontmatter helpers
+# ---------------------------------------------------------------------------
+FRONTMATTER_RE = re.compile(r"^---\s*\n(.*?)\n---\s*\n", re.DOTALL)
+CORE_REF_RE = re.compile(r"\[\[Core:\s+(.+?)\]\]")
+# Matches the exact cross-vault format: [[Core: Title Case Name]]
+CORE_REF_STRICT_RE = re.compile(r"\[\[Core: [A-Z][^\]]+\]\]")
+CORE_REF_ANY_RE = re.compile(r"\[\[core[:\s].*?\]\]", re.IGNORECASE)
+
+
+def _parse_frontmatter(text: str) -> dict | None:
+    """Return a dict of frontmatter key-value pairs, or None if absent/malformed."""
+    match = FRONTMATTER_RE.match(text)
+    if not match:
+        return None
+    raw = match.group(1)
+    result: dict = {}
+    # Minimal YAML parser: handles scalars, quoted strings, and inline lists.
+    current_key = None
+    list_mode = False
+    for line in raw.splitlines():
+        if not line.strip() or line.strip().startswith("#"):
+            continue
+        # List item
+        if line.startswith("  - ") or line.startswith("- "):
+            item = line.strip().lstrip("- ").strip().strip('"').strip("'")
+            if current_key is not None:
+                if not isinstance(result.get(current_key), list):
+                    result[current_key] = []
+                result[current_key].append(item)
+            continue
+        # Key: value
+        if ":" in line:
+            key, _, value = line.partition(":")
+            key = key.strip()
+            value = value.strip().strip('"').strip("'")
+            current_key = key
+            list_mode = value == ""
+            if not list_mode:
+                result[key] = value
+            else:
+                result[key] = []
+    return result
+
+
+def _extract_summary(text: str, max_chars: int = 200) -> str:
+    """Return a short summary: prefer the `summary` frontmatter field, else first prose line."""
+    fm = _parse_frontmatter(text)
+    if fm and fm.get("summary"):
+        return fm["summary"][:max_chars]
+    # Strip frontmatter block
+    stripped = FRONTMATTER_RE.sub("", text, count=1).strip()
+    for line in stripped.splitlines():
+        line = line.strip()
+        # Skip headings, blank lines, HTML comments
+        if line and not line.startswith("#") and not line.startswith("<!--") and not line.startswith(">"):
+            return line[:max_chars]
+    return ""
+
+
+# ---------------------------------------------------------------------------
+# Command: build
+# ---------------------------------------------------------------------------
+def cmd_build(args) -> int:
+    """Scan Wiki/ and regenerate catalog.jsonl."""
+    WIKI_DIR.mkdir(parents=True, exist_ok=True)
+    entries = []
+    md_files = sorted(WIKI_DIR.rglob("*.md"))
+    skipped = []
+    for path in md_files:
+        # Skip the log file itself
+        if path.name == "log.md":
+            continue
+        text = path.read_text(encoding="utf-8", errors="replace")
+        fm = _parse_frontmatter(text)
+        title = (fm or {}).get("title") or path.stem.replace("-", " ").replace("_", " ").title()
+        summary = _extract_summary(text)
+        rel_path = path.relative_to(VAULT_ROOT).as_posix()
+        tags = (fm or {}).get("tags", [])
+        if isinstance(tags, str):
+            tags = [tags]
+        entry = {
+            "path": rel_path,
+            "title": title,
+            "summary": summary,
+            "tags": tags,
+            "sources": (fm or {}).get("sources", []),
+            "updated_date": (fm or {}).get("updated_date", ""),
+        }
+        entries.append(entry)
+
+    # Write catalog
+    with CATALOG_FILE.open("w", encoding="utf-8") as f:
+        for entry in entries:
+            f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+
+    print(f"[build] Catalogued {len(entries)} notes -> {CATALOG_FILE.relative_to(VAULT_ROOT)}")
+    if skipped:
+        for s in skipped:
+            print(f"  [skip] {s}")
+    return 0
+
+
+# ---------------------------------------------------------------------------
+# Command: lint
+# ---------------------------------------------------------------------------
+def cmd_lint(args) -> int:
+    """Validate all Wiki/ .md files."""
+    errors: list[str] = []
+    warnings: list[str] = []
+    md_files = sorted(WIKI_DIR.rglob("*.md"))
+
+    # Load catalog for [[Core: ...]] validation
+    catalog_titles: set[str] = set()
+    if CATALOG_FILE.exists():
+        with CATALOG_FILE.open(encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if line:
+                    try:
+                        entry = json.loads(line)
+                        if entry.get("title"):
+                            catalog_titles.add(entry["title"])
+                    except json.JSONDecodeError:
+                        pass
+
+    # Collect all raw source filenames for citation validation
+    raw_source_files: set[str] = set()
+    if RAW_SOURCES_DIR.exists():
+        for p in RAW_SOURCES_DIR.rglob("*"):
+            if p.is_file():
+                # Store both relative posix path and filename stem
+                raw_source_files.add(p.relative_to(VAULT_ROOT).as_posix())
+                raw_source_files.add(p.name)
+
+    for path in md_files:
+        if path.name == "log.md":
+            continue
+        rel = path.relative_to(VAULT_ROOT).as_posix()
+        text = path.read_text(encoding="utf-8", errors="replace")
+
+        # ── 1. Frontmatter must exist ──────────────────────────────────────
+        fm = _parse_frontmatter(text)
+        if fm is None:
+            errors.append(f"{rel}: Missing or malformed YAML frontmatter.")
+            continue  # Can't check further without frontmatter
+
+        # ── 2. Required fields ─────────────────────────────────────────────
+        for field in ("title", "tags", "created_date", "updated_date", "sources"):
+            if field not in fm:
+                errors.append(f"{rel}: Frontmatter missing required field `{field}`.")
+
+        # ── 3. Tags must be non-empty lowercase list ────────────────────────
+        tags = fm.get("tags", [])
+        if isinstance(tags, str):
+            tags = [tags]
+        if not tags:
+            errors.append(f"{rel}: `tags` array is empty.")
+        else:
+            for tag in tags:
+                if tag != tag.lower():
+                    warnings.append(f"{rel}: Tag `{tag}` should be lowercase.")
+
+        # ── 4. Sources must resolve to real Raw/Sources/ files ─────────────
+        sources = fm.get("sources", [])
+        if isinstance(sources, str):
+            sources = [sources]
+        if not sources:
+            errors.append(f"{rel}: `sources` array is empty (AGENTS.md Rule 2).")
+        else:
+            for src in sources:
+                # Accept absolute vault-relative paths or bare filenames
+                src_path = VAULT_ROOT / src if not Path(src).is_absolute() else Path(src)
+                if not src_path.exists():
+                    # Try matching by filename only
+                    if Path(src).name not in raw_source_files and src not in raw_source_files:
+                        errors.append(f"{rel}: Source `{src}` not found in Raw/Sources/.")
+
+        # ── 5. [[Core: Concept]] format validation ─────────────────────────
+        all_core_refs = CORE_REF_ANY_RE.findall(text)
+        strict_core_refs = CORE_REF_STRICT_RE.findall(text)
+        if len(all_core_refs) != len(strict_core_refs):
+            errors.append(
+                f"{rel}: One or more [[Core: ...]] references have incorrect formatting. "
+                "Required: [[Core: Title Case Name]] with a space after the colon."
+            )
+
+        # Validate that referenced concepts exist in the catalog
+        for ref_match in CORE_REF_RE.finditer(text):
+            concept = ref_match.group(1).strip()
+            full_title = f"Core: {concept}"
+            if catalog_titles and concept not in catalog_titles and full_title not in catalog_titles:
+                warnings.append(
+                    f"{rel}: [[Core: {concept}]] not found in catalog. "
+                    "Run `build` after creating the concept note."
+                )
+
+    # ── Report ─────────────────────────────────────────────────────────────
+    total = len([p for p in md_files if p.name != "log.md"])
+    if errors:
+        print(f"[lint] FAIL {len(errors)} error(s), {len(warnings)} warning(s) across {total} file(s).\n")
+        for e in errors:
+            print(f"  ERROR   {e}")
+        for w in warnings:
+            print(f"  WARNING {w}")
+        return 1
+    elif warnings:
+        print(f"[lint] WARN 0 errors, {len(warnings)} warning(s) across {total} file(s).\n")
+        for w in warnings:
+            print(f"  WARNING {w}")
+        return 0
+    else:
+        print(f"[lint] OK All {total} file(s) passed with 0 errors, 0 warnings.")
+        return 0
+
+
+# ---------------------------------------------------------------------------
+# Command: search-catalog
+# ---------------------------------------------------------------------------
+def cmd_search_catalog(args) -> int:
+    """Search catalog.jsonl for --query and print matching paths."""
+    if not CATALOG_FILE.exists():
+        print("[search-catalog] catalog.jsonl not found. Run `build` first.", file=sys.stderr)
+        return 1
+
+    query = args.query.lower()
+    tokens = query.split()
+    results = []
+
+    with CATALOG_FILE.open(encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                entry = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            haystack = " ".join([
+                entry.get("title", ""),
+                entry.get("summary", ""),
+                " ".join(entry.get("tags", [])),
+            ]).lower()
+            score = sum(1 for token in tokens if token in haystack)
+            if score > 0:
+                results.append((score, entry))
+
+    results.sort(key=lambda x: x[0], reverse=True)
+
+    if not results:
+        print(f"[search-catalog] No results for query: '{args.query}'")
+        return 0
+
+    print(f"[search-catalog] {len(results)} result(s) for '{args.query}':\n")
+    for rank, (score, entry) in enumerate(results, 1):
+        print(f"  [{rank}] {entry.get('title', '(no title)')}")
+        print(f"       Path    : {entry.get('path', '')}")
+        print(f"       Summary : {entry.get('summary', '')[:120]}")
+        print(f"       Tags    : {', '.join(entry.get('tags', []))}")
+        print()
+    return 0
+
+
+# ---------------------------------------------------------------------------
+# Command: log
+# ---------------------------------------------------------------------------
+def cmd_log(args) -> int:
+    """Append a timestamped entry to Wiki/log.md."""
+    WIKI_DIR.mkdir(parents=True, exist_ok=True)
+    timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    action = args.action
+    details = args.details or ""
+
+    header_needed = not LOG_FILE.exists()
+    with LOG_FILE.open("a", encoding="utf-8") as f:
+        if header_needed:
+            f.write("# Wiki Activity Log\n\n")
+            f.write("Chronological record of all agent actions in this vault.\n\n")
+            f.write("---\n\n")
+        f.write(f"## {timestamp} — {action}\n\n")
+        if details:
+            f.write(f"{details}\n\n")
+        f.write("---\n\n")
+
+    print(f"[log] Entry appended to {LOG_FILE.relative_to(VAULT_ROOT)}: {action}")
+    return 0
+
+
+# ---------------------------------------------------------------------------
+# CLI entry point
+# ---------------------------------------------------------------------------
+def main() -> int:
+    parser = argparse.ArgumentParser(
+        prog="wiki_tool.py",
+        description="Deterministic engine for the CoreBrain LLM Wiki Vault.",
+    )
+    subparsers = parser.add_subparsers(dest="command", required=True)
+
+    # build
+    subparsers.add_parser("build", help="Scan Wiki/ and regenerate catalog.jsonl")
+
+    # lint
+    subparsers.add_parser("lint", help="Validate all Wiki/ .md files")
+
+    # search-catalog
+    sp_search = subparsers.add_parser("search-catalog", help="Search catalog.jsonl")
+    sp_search.add_argument("--query", required=True, help="Search query string")
+
+    # log
+    sp_log = subparsers.add_parser("log", help="Append an entry to Wiki/log.md")
+    sp_log.add_argument("--action", required=True, help="Short action title")
+    sp_log.add_argument("--details", default="", help="Additional details")
+
+    args = parser.parse_args()
+
+    dispatch = {
+        "build": cmd_build,
+        "lint": cmd_lint,
+        "search-catalog": cmd_search_catalog,
+        "log": cmd_log,
+    }
+    return dispatch[args.command](args)
+
+
+if __name__ == "__main__":
+    sys.exit(main())
