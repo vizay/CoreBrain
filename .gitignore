@@ -1,0 +1,45 @@
+# ==========================================
+# Obsidian (Workspace Churn & Cache)
+# ==========================================
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.trash/
+*.bkp
+*.tmp
+
+# ==========================================
+# Agent & Python Tooling
+# ==========================================
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+.env
+.agents/**/*.log
+.agents/**/scratch/
+
+# ==========================================
+# OS & System Bloat
+# ==========================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ==========================================
+# Node (future-proofing)
+# ==========================================
+node_modules/
+
+# ==========================================
+# Heavy Binaries in Raw/Sources/
+# (use Git LFS instead — uncomment to exclude)
+# ==========================================
+# Raw/Sources/**/*.pdf
+# Raw/Sources/**/*.mp4
+# Raw/Sources/**/*.wav
