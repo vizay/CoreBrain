@@ -4,17 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "8ddcbae0dccce7f7",
+        "id": "41ea5956225c4fd4",
         "type": "tabs",
         "children": [
           {
-            "id": "046e80a88b819404",
+            "id": "9c7596c146c889e4",
             "type": "leaf",
             "state": {
-              "type": "graph",
+              "type": "empty",
               "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph view"
+              "icon": "lucide-file",
+              "title": "New tab"
             }
           }
         ]
@@ -187,14 +187,15 @@
       "bases:Create new base": false
     }
   },
-  "active": "046e80a88b819404",
+  "active": "9c7596c146c889e4",
   "lastOpenFiles": [
+    "Wiki/Architectural-Decision-Record.md",
+    "ADR Adoption and Practices.md",
     "Local-Vault-Starter-Kit/Schema/AGENTS.md",
     "Wiki/ADR-Adoption-and-Practices.md",
     "Wiki/AD-Definition-of-Done.md",
     "Wiki/AD-Definition-of-Ready.md",
     "Wiki/MADR.md",
-    "Wiki/Architectural-Decision-Record.md",
     "Wiki/Architectural-Decision.md",
     "Raw/Sources/Documenting Architecture Decisions.md",
     "Raw/Sources/An Adoption Model for Architectural Decision Making and Capturing.md",
@@ -213,7 +214,6 @@
     "Raw-Wiki-Schema Architecture.md",
     "Wiki/Hub-Spoke-Architecture.md",
     "Wiki/LLM-Wiki.md",
-    "262588213843476.md",
-    "Wiki/Wanderloots.md"
+    "262588213843476.md"
   ]
 }
