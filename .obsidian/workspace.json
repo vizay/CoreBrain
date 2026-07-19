@@ -4,17 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "4d87c9c5758781bc",
+        "id": "9e48b220fcbf1a03",
         "type": "tabs",
         "children": [
           {
-            "id": "685ca22e95d370ed",
+            "id": "9c06ab9f2b012091",
             "type": "leaf",
             "state": {
-              "type": "empty",
+              "type": "graph",
               "state": {},
-              "icon": "lucide-file",
-              "title": "New tab"
+              "icon": "lucide-git-fork",
+              "title": "Graph view"
             }
           }
         ]
@@ -49,7 +49,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "firewall",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -187,33 +187,33 @@
       "bases:Create new base": false
     }
   },
-  "active": "685ca22e95d370ed",
+  "active": "9c06ab9f2b012091",
   "lastOpenFiles": [
+    "Wiki/ADR-Adoption-and-Practices.md",
+    "Wiki/AD-Definition-of-Done.md",
+    "Wiki/AD-Definition-of-Ready.md",
+    "Wiki/MADR.md",
+    "Wiki/Architectural-Decision-Record.md",
+    "Wiki/Architectural-Decision.md",
+    "Raw/Sources/Documenting Architecture Decisions.md",
+    "Raw/Sources/An Adoption Model for Architectural Decision Making and Capturing.md",
+    "Raw/Sources/How to review Architectural Decision Records (ADRs) — and how not to.md",
+    "Raw/Sources/A Definition of Done for Architectural Decision Making.md",
+    "Raw/Sources/Architectural Significance Criteria and Some Core Decisions Required.md",
+    "Raw/Sources/A Definition of Ready for Architectural Decisions (ADs).md",
+    "Raw/Sources/How to create Architectural Decision Records (ADRs) — and how not to.md",
+    "Raw/Sources/Decision-making ADRs weightings are a work-around.md",
+    "Raw/Sources/MADR Template minimal.md",
+    "Raw/Sources/MADR Template.md",
+    "Raw/Sources/The Markdown ADR (MADR) Template Explained and Distilled.md",
+    "Raw/Sources/ADR Templates.md",
+    "Raw/Sources/AD Practices.md",
+    "Raw/Sources/Architectural Decision Records (ADRs).md",
+    "Raw-Wiki-Schema Architecture.md",
     "Wiki/Hub-Spoke-Architecture.md",
+    "Wiki/LLM-Wiki.md",
     "262588213843476.md",
     "Wiki/Wanderloots.md",
-    "Wiki/Raw-Wiki-Schema-Architecture.md",
-    "Wiki/Graph-RAG.md",
-    "Wiki/RAG.md",
-    "Hub-Spoke Architecture.md",
-    "Wiki/Knowledge-Graph.md",
-    "Wiki/LLM-Wiki.md",
-    "Concept.md",
-    "Raw/Sources/Why LLM Wiki 🧠 Future Of Knowledge For Agentic AI & Humans.md",
-    "Raw/Sources/vibe-codingwanderloots-llm-wiki-core-setup-v1.0.0.md at main.md",
-    "Raw/Sources/llm-wiki.md",
-    "Raw/Sources/How To Build LLM Wiki In Obsidian 🧠 A Memory Layer For Any Agentic AI.md",
-    "Wiki/log.md",
-    "Wiki/_lint_test.md",
-    "Schema/AGENTS.md",
-    "_templates/wiki-note.md",
-    "_templates/source-note.md",
-    "Local-Vault-Starter-Kit/_templates/wiki-note.md",
-    "Wiki/Pydantic.md",
-    "Wiki/Starlette.md",
-    "Wiki/Uvicorn.md",
-    "Wiki/OpenAPI.md",
-    "Wiki/FastAPI.md",
-    "Raw/Sources/FastAPI - FastAPI.md"
+    "Wiki/Raw-Wiki-Schema-Architecture.md"
   ]
 }
