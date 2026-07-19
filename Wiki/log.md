@@ -76,3 +76,9 @@ Checked 20 files. 0 errors, 0 warnings. All files pass.
 
 ---
 
+## 2026-07-19T19:35:30Z — Ingested: 4 ADR Raw Sources
+
+Created Wiki/ADR-Deterministic-Python-Tooling.md, Wiki/ADR-Project-Scoped-Agent-Skills.md, Wiki/ADR-Local-Vault-Starter-Kit.md, and Wiki/ADR-Read-Only-Firewalling.md. Marked sources processed.
+
+---
+
