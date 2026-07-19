@@ -58,3 +58,9 @@ Ran linter. 18 files passed with 0 errors, 0 warnings.
 
 ---
 
+## 2026-07-19T19:04:38Z — Ingested: Architectural decision & Architecturally significant requirements
+
+Created Wiki/Architecturally-Significant-Requirement.md. Updated Wiki/Architectural-Decision.md. Marked sources processed.
+
+---
+
