@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "ea2234cb82eae331",
+        "id": "5173a87d16077de6",
         "type": "tabs",
         "children": [
           {
-            "id": "01c3958a1e9374a3",
+            "id": "904d55a7e61151e4",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -49,7 +49,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "Core",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -80,7 +80,8 @@
               "title": "Graph view"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -173,7 +174,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 828.5
+    "width": 828.5,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -186,13 +188,15 @@
       "bases:Create new base": false
     }
   },
-  "active": "01c3958a1e9374a3",
+  "active": "904d55a7e61151e4",
   "lastOpenFiles": [
+    "Schema/AGENTS.md",
+    "_templates/wiki-note.md",
+    "_templates/source-note.md",
+    "Local-Vault-Starter-Kit/_templates/wiki-note.md",
     "Wiki/Pydantic.md",
     "Wiki/Starlette.md",
     "Wiki/Uvicorn.md",
-    "_templates/wiki-note.md",
-    "Schema/AGENTS.md",
     "Wiki/OpenAPI.md",
     "Wiki/FastAPI.md",
     "Raw/Sources/FastAPI - FastAPI.md",

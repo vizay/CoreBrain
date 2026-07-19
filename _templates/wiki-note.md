@@ -6,9 +6,9 @@ tags:
 created_date: "{{YYYY-MM-DD}}"
 updated_date: "{{YYYY-MM-DD}}"
 sources:
-  - "Raw/Sources/{{SOURCE_FILE_1}}.md"
+  - Raw/Sources/{{SOURCE_FILE_1}}.md
 related:
-  - "[[Core: {{RELATED_CONCEPT_1}}]]"
+  - "[[{{RELATED_CONCEPT_1}}]]"
 summary: "{{ONE_SENTENCE_SUMMARY}}"
 ---
 
@@ -30,8 +30,8 @@ summary: "{{ONE_SENTENCE_SUMMARY}}"
 
 ## Related Concepts
 
-- [[Core: {{RELATED_CONCEPT_1}}]]
-- [[Core: {{RELATED_CONCEPT_2}}]]
+- [[{{RELATED_CONCEPT_1}}]]
+- [[{{RELATED_CONCEPT_2}}]]
 
 ## Source References
 
