@@ -60,18 +60,16 @@ be logged via `python scripts/wiki_tool.py log`.
 
 ---
 
-## Rule 5 — Cross-Vault Referencing
+## Rule 5 — Cross-Vault Referencing (Local Vault)
 
 > **Universal concepts must be formatted precisely as `[[Core: Concept Name]]`.**
 
-When referencing a concept that is (or should be) shared across multiple vaults,
-use the exact prefix `Core: ` followed by the concept name in Title Case.
+When referencing a global concept (language syntax, standard frameworks, overarching architecture) that lives in the CoreBrain, use the exact prefix `Core: ` followed by the concept name in Title Case. When referencing local app-specific logic, use standard `[[Concept Name]]` formatting.
 
-- ✅ `[[Core: Retrieval-Augmented Generation]]`
-- ✅ `[[Core: Transformer Architecture]]`
-- ❌ `[[core: transformer architecture]]`  ← wrong case
-- ❌ `[[Transformer Architecture]]`         ← missing `Core:` prefix
-- ❌ `[[Core:Transformer Architecture]]`    ← missing space after colon
+- ✅ `[[Core: FastAPI]]` (For a global framework reference)
+- ✅ `[[User Auth Logic]]` (For local app logic)
+- ❌ `[[core: fastAPI]]`  ← wrong case
+- ❌ `[[FastAPI]]`        ← missing `Core:` prefix for a global concept
 
 The lint tool validates these tags against `Wiki/catalog.jsonl`. If the concept
 does not exist yet, create the Wiki note first, run `build`, then add the reference.

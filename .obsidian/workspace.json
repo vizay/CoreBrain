@@ -4,17 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "28a332536ffcfb73",
+        "id": "ea2234cb82eae331",
         "type": "tabs",
         "children": [
           {
-            "id": "964f87a47cb010e3",
+            "id": "01c3958a1e9374a3",
             "type": "leaf",
             "state": {
-              "type": "graph",
+              "type": "empty",
               "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph view"
+              "icon": "lucide-file",
+              "title": "New tab"
             }
           }
         ]
@@ -186,15 +186,15 @@
       "bases:Create new base": false
     }
   },
-  "active": "964f87a47cb010e3",
+  "active": "01c3958a1e9374a3",
   "lastOpenFiles": [
+    "Wiki/Pydantic.md",
+    "Wiki/Starlette.md",
+    "Wiki/Uvicorn.md",
     "_templates/wiki-note.md",
     "Schema/AGENTS.md",
     "Wiki/OpenAPI.md",
-    "Wiki/Uvicorn.md",
     "Wiki/FastAPI.md",
-    "Wiki/Starlette.md",
-    "Wiki/Pydantic.md",
     "Raw/Sources/FastAPI - FastAPI.md",
     "Welcome.md"
   ]

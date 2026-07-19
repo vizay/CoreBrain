@@ -108,7 +108,7 @@ def cmd_build(args) -> int:
         # Skip the log file itself
         if path.name == "log.md":
             continue
-        text = path.read_text(encoding="utf-8", errors="replace")
+        text = path.read_text(encoding="utf-8-sig", errors="replace")
         fm = _parse_frontmatter(text)
         title = (fm or {}).get("title") or path.stem.replace("-", " ").replace("_", " ").title()
         summary = _extract_summary(text)
@@ -174,7 +174,7 @@ def cmd_lint(args) -> int:
         if path.name == "log.md":
             continue
         rel = path.relative_to(VAULT_ROOT).as_posix()
-        text = path.read_text(encoding="utf-8", errors="replace")
+        text = path.read_text(encoding="utf-8-sig", errors="replace")
 
         # ── 1. Frontmatter must exist ──────────────────────────────────────
         fm = _parse_frontmatter(text)

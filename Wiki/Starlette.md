@@ -10,8 +10,8 @@ updated_date: "2026-07-19"
 sources:
   - "Raw/Sources/FastAPI - FastAPI.md"
 related:
-  - "[[Core: FastAPI]]"
-  - "[[Core: Uvicorn]]"
+  - "[[FastAPI]]"
+  - "[[Uvicorn]]"
 summary: "Starlette is a lightweight ASGI web toolkit for Python that provides the web layer (routing, middleware, WebSockets, CORS) underlying FastAPI."
 ---
 
@@ -21,12 +21,12 @@ summary: "Starlette is a lightweight ASGI web toolkit for Python that provides t
 
 ## Core Concept
 
-Starlette is the web layer that [[Core: FastAPI]] is built on. It provides all low-level HTTP routing, middleware, request/response handling, and async support. FastAPI adds the type-hint-driven validation, dependency injection, and automatic API documentation layer on top of Starlette's foundation.
+Starlette is the web layer that [[FastAPI]] is built on. It provides all low-level HTTP routing, middleware, request/response handling, and async support. FastAPI adds the type-hint-driven validation, dependency injection, and automatic API documentation layer on top of Starlette's foundation.
 
 ## Key Points
 
-- **ASGI-native**: Designed for the Asynchronous Server Gateway Interface standard, enabling high concurrency with [[Core: Uvicorn]].
-- **Performance**: In TechEmpower independent benchmarks, Starlette itself ranks above [[Core: FastAPI]] (since FastAPI adds overhead on top). FastAPI's performance is described as "only below Starlette and Uvicorn themselves."
+- **ASGI-native**: Designed for the Asynchronous Server Gateway Interface standard, enabling high concurrency with [[Uvicorn]].
+- **Performance**: In TechEmpower independent benchmarks, Starlette itself ranks above [[FastAPI]] (since FastAPI adds overhead on top). FastAPI's performance is described as "only below Starlette and Uvicorn themselves."
 - **Features provided to FastAPI** (sourced from FastAPI docs):
   - WebSockets
   - CORS (Cross-Origin Resource Sharing)
@@ -41,12 +41,12 @@ Starlette is the web layer that [[Core: FastAPI]] is built on. It provides all l
 
 ## Role in FastAPI
 
-Listed as one of two **core requirements** of [[Core: FastAPI]] (alongside [[Core: Pydantic]]). The source states: "FastAPI stands on the shoulders of giants: Starlette for the web parts, Pydantic for the data parts."
+Listed as one of two **core requirements** of [[FastAPI]] (alongside [[Pydantic]]). The source states: "FastAPI stands on the shoulders of giants: Starlette for the web parts, Pydantic for the data parts."
 
 ## Related Concepts
 
-- [[Core: FastAPI]]
-- [[Core: Uvicorn]]
+- [[FastAPI]]
+- [[Uvicorn]]
 
 ## Source References
 

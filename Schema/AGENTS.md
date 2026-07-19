@@ -60,21 +60,16 @@ be logged via `python scripts/wiki_tool.py log`.
 
 ---
 
-## Rule 5 — Cross-Vault Referencing
+## Rule 5 — Standard Linking (Core Vault)
 
-> **Universal concepts must be formatted precisely as `[[Core: Concept Name]]`.**
+> **Because you are operating within the Core Knowledge Vault, use standard native wiki links for all concepts.**
 
-When referencing a concept that is (or should be) shared across multiple vaults,
-use the exact prefix `Core: ` followed by the concept name in Title Case.
+When referencing a concept, do **not** use prefixes like `Core:`. Use standard Title Case wiki links. External or uningested concepts are fine to link, but keep the formatting clean.
 
-- ✅ `[[Core: Retrieval-Augmented Generation]]`
-- ✅ `[[Core: Transformer Architecture]]`
-- ❌ `[[core: transformer architecture]]`  ← wrong case
-- ❌ `[[Transformer Architecture]]`         ← missing `Core:` prefix
-- ❌ `[[Core:Transformer Architecture]]`    ← missing space after colon
-
-The lint tool validates these tags against `Wiki/catalog.jsonl`. If the concept
-does not exist yet, create the Wiki note first, run `build`, then add the reference.
+- ✅ `[[Retrieval-Augmented Generation]]`
+- ✅ `[[Transformer Architecture]]`
+- ❌ `[[Core: Retrieval-Augmented Generation]]`  ← DO NOT use the Core prefix in this vault.
+- ❌ `[[transformer architecture]]`  ← wrong case
 
 ---
 

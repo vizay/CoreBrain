@@ -10,8 +10,8 @@ updated_date: "2026-07-19"
 sources:
   - "Raw/Sources/FastAPI - FastAPI.md"
 related:
-  - "[[Core: FastAPI]]"
-  - "[[Core: Starlette]]"
+  - "[[FastAPI]]"
+  - "[[Starlette]]"
 summary: "Pydantic is a Python data validation library that uses standard type hints to validate, parse, and serialize data at runtime."
 ---
 
@@ -21,7 +21,7 @@ summary: "Pydantic is a Python data validation library that uses standard type h
 
 ## Core Concept
 
-Pydantic is the data layer powering [[Core: FastAPI]]. It takes ordinary Python type annotations on class attributes or function parameters and enforces them at runtime — converting raw inputs (JSON, path params, query strings) into correctly typed Python objects, and raising clear validation errors when data is invalid.
+Pydantic is the data layer powering [[FastAPI]]. It takes ordinary Python type annotations on class attributes or function parameters and enforces them at runtime — converting raw inputs (JSON, path params, query strings) into correctly typed Python objects, and raising clear validation errors when data is invalid.
 
 ## Key Points
 
@@ -45,11 +45,11 @@ class Item(BaseModel):
     is_offer: bool | None = None
 ```
 
-With this single declaration, [[Core: FastAPI]] validates incoming `PUT` bodies automatically, including type coercion and optional field handling.
+With this single declaration, [[FastAPI]] validates incoming `PUT` bodies automatically, including type coercion and optional field handling.
 
 ## Role in FastAPI
 
-Pydantic is listed as a **core requirement** of [[Core: FastAPI]]. It handles:
+Pydantic is listed as a **core requirement** of [[FastAPI]]. It handles:
 - Request body parsing and validation
 - Query parameter type coercion
 - Response model serialization
@@ -57,8 +57,8 @@ Pydantic is listed as a **core requirement** of [[Core: FastAPI]]. It handles:
 
 ## Related Concepts
 
-- [[Core: FastAPI]]
-- [[Core: Starlette]]
+- [[FastAPI]]
+- [[Starlette]]
 
 ## Source References
 
