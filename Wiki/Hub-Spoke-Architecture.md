@@ -12,7 +12,7 @@ sources:
   - "Raw/Sources/How To Build LLM Wiki In Obsidian 🧠 A Memory Layer For Any Agentic AI.md"
 related:
   - "[[LLM Wiki]]"
-  - "[[Raw-Wiki-Schema Architecture]]"
+  - "[[Raw-Wiki-Schema-Architecture]]"
 summary: "A multi-vault LLM Wiki topology where a central CoreBrain hub holds universal, project-agnostic knowledge, and individual project-specific spoke vaults reference hub concepts via Core-prefixed wikilinks while maintaining their own local wiki."
 ---
 
@@ -44,7 +44,7 @@ The author (Wanderloots) describes a similar personal separation: "I like to kee
 ## Related Concepts
 
 - [[LLM Wiki]]
-- [[Raw-Wiki-Schema Architecture]]
+- [[Raw-Wiki-Schema-Architecture]]
 
 ## Source References
 

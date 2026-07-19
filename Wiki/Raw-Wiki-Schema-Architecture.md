@@ -12,7 +12,7 @@ sources:
   - "Raw/Sources/vibe-codingwanderloots-llm-wiki-core-setup-v1.0.0.md at main.md"
 related:
   - "[[LLM Wiki]]"
-  - "[[Hub-Spoke Architecture]]"
+  - "[[Hub-Spoke-Architecture]]"
 summary: "The three-layer structural foundation of an LLM Wiki: Raw (immutable source documents), Wiki (LLM-generated compiled knowledge notes), and Schema (the agent contract defining conventions, rules, and workflows)."
 ---
 
@@ -46,7 +46,7 @@ The schema is the **contract between the human and the agent**. Changing naming 
 ## Related Concepts
 
 - [[LLM Wiki]]
-- [[Hub-Spoke Architecture]]
+- [[Hub-Spoke-Architecture]]
 
 ## Source References
 

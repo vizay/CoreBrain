@@ -15,8 +15,8 @@ related:
   - "[[Knowledge Graph]]"
   - "[[RAG]]"
   - "[[Graph RAG]]"
-  - "[[Raw-Wiki-Schema Architecture]]"
-  - "[[Hub-Spoke Architecture]]"
+  - "[[Raw-Wiki-Schema-Architecture]]"
+  - "[[Hub-Spoke-Architecture]]"
 summary: "A persistent, compounding knowledge base written and maintained by LLMs that sits between raw source documents and AI tools, replacing per-query RAG retrieval with a pre-compiled, interlinked wiki of structured markdown notes."
 ---
 
@@ -47,8 +47,8 @@ The concept was popularised by Andrej Karpathy's GitHub gist and is grounded in 
 - [[Knowledge Graph]]
 - [[RAG]]
 - [[Graph RAG]]
-- [[Raw-Wiki-Schema Architecture]]
-- [[Hub-Spoke Architecture]]
+- [[Raw-Wiki-Schema-Architecture]]
+- [[Hub-Spoke-Architecture]]
 
 ## Source References
 
