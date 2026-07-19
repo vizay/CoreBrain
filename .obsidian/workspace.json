@@ -4,17 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "15651a420f5dea0c",
+        "id": "4d87c9c5758781bc",
         "type": "tabs",
         "children": [
           {
-            "id": "736383d53ce39059",
+            "id": "685ca22e95d370ed",
             "type": "leaf",
             "state": {
-              "type": "graph",
+              "type": "empty",
               "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph view"
+              "icon": "lucide-file",
+              "title": "New tab"
             }
           }
         ]
@@ -187,10 +187,23 @@
       "bases:Create new base": false
     }
   },
-  "active": "736383d53ce39059",
+  "active": "685ca22e95d370ed",
   "lastOpenFiles": [
-    "Wiki/log.md",
+    "Wiki/Hub-Spoke-Architecture.md",
+    "262588213843476.md",
+    "Wiki/Wanderloots.md",
+    "Wiki/Raw-Wiki-Schema-Architecture.md",
+    "Wiki/Graph-RAG.md",
+    "Wiki/RAG.md",
+    "Hub-Spoke Architecture.md",
+    "Wiki/Knowledge-Graph.md",
+    "Wiki/LLM-Wiki.md",
     "Concept.md",
+    "Raw/Sources/Why LLM Wiki 🧠 Future Of Knowledge For Agentic AI & Humans.md",
+    "Raw/Sources/vibe-codingwanderloots-llm-wiki-core-setup-v1.0.0.md at main.md",
+    "Raw/Sources/llm-wiki.md",
+    "Raw/Sources/How To Build LLM Wiki In Obsidian 🧠 A Memory Layer For Any Agentic AI.md",
+    "Wiki/log.md",
     "Wiki/_lint_test.md",
     "Schema/AGENTS.md",
     "_templates/wiki-note.md",
@@ -201,7 +214,6 @@
     "Wiki/Uvicorn.md",
     "Wiki/OpenAPI.md",
     "Wiki/FastAPI.md",
-    "Raw/Sources/FastAPI - FastAPI.md",
-    "Welcome.md"
+    "Raw/Sources/FastAPI - FastAPI.md"
   ]
 }
