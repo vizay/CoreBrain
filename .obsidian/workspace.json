@@ -4,17 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "42eeb056e3b47b74",
+        "id": "28a332536ffcfb73",
         "type": "tabs",
         "children": [
           {
-            "id": "cef63d6052ab7b38",
+            "id": "964f87a47cb010e3",
             "type": "leaf",
             "state": {
-              "type": "empty",
+              "type": "graph",
               "state": {},
-              "icon": "lucide-file",
-              "title": "New tab"
+              "icon": "lucide-git-fork",
+              "title": "Graph view"
             }
           }
         ]
@@ -68,6 +68,16 @@
               "state": {},
               "icon": "lucide-bookmark",
               "title": "Bookmarks"
+            }
+          },
+          {
+            "id": "b18f7a03f93e87b2",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Graph view"
             }
           }
         ]
@@ -158,26 +168,34 @@
               "title": "Outline"
             }
           }
-        ]
+        ],
+        "currentTab": 4
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 828.5
   },
   "left-ribbon": {
     "hiddenItems": {
       "switcher:Open quick switcher": false,
-      "graph:Open graph view": false,
       "canvas:Create new canvas": false,
       "daily-notes:Open today's daily note": false,
       "templates:Insert template": false,
       "command-palette:Open command palette": false,
+      "graph:Open graph view": false,
       "bases:Create new base": false
     }
   },
-  "active": "6414541c33b5c72f",
+  "active": "964f87a47cb010e3",
   "lastOpenFiles": [
+    "_templates/wiki-note.md",
+    "Schema/AGENTS.md",
+    "Wiki/OpenAPI.md",
+    "Wiki/Uvicorn.md",
+    "Wiki/FastAPI.md",
+    "Wiki/Starlette.md",
+    "Wiki/Pydantic.md",
+    "Raw/Sources/FastAPI - FastAPI.md",
     "Welcome.md"
   ]
 }
