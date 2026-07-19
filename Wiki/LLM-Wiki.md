@@ -37,7 +37,7 @@ The concept was popularised by Andrej Karpathy's GitHub gist and is grounded in 
 - The LLM writes and maintains the wiki; the human curates sources and asks questions.
 - Unlike RAG, knowledge is compiled once — not re-derived on every query.
 - The wiki is just a git repo of markdown files: version history, branching, and collaboration come for free.
-- A [[Schema]] (AGENTS.md or CLAUDE.md) acts as the contract between the human and the agent, defining conventions and workflows.
+- A [[Raw-Wiki-Schema-Architecture|Schema]] (AGENTS.md or CLAUDE.md) acts as the contract between the human and the agent, defining conventions and workflows.
 - The human's job: curate sources, direct analysis, ask good questions. The LLM's job: summarizing, cross-referencing, filing, bookkeeping.
 - Good answers to queries can be filed back into the wiki as new pages, compounding exploration.
 - Obsidian is a natural IDE for this system: the LLM is the programmer, the wiki is the codebase.

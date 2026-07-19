@@ -147,8 +147,9 @@ def cmd_lint(args) -> int:
     warnings: list[str] = []
     md_files = sorted(WIKI_DIR.rglob("*.md"))
 
-    # Load catalog titles for [[Concept]] link validation
+    # Load catalog titles and stems for [[Concept]] link validation
     catalog_titles: set[str] = set()
+    catalog_stems: set[str] = set()
     if CATALOG_FILE.exists():
         with CATALOG_FILE.open(encoding="utf-8") as f:
             for line in f:
@@ -158,6 +159,8 @@ def cmd_lint(args) -> int:
                         entry = json.loads(line)
                         if entry.get("title"):
                             catalog_titles.add(entry["title"])
+                        if entry.get("path"):
+                            catalog_stems.add(Path(entry["path"]).stem)
                     except json.JSONDecodeError:
                         pass
 
@@ -223,13 +226,31 @@ def cmd_lint(args) -> int:
             )
 
         # 5b. Warn when a [[Concept]] link doesn't resolve to a known catalog title
-        if catalog_titles:
+        if catalog_titles or catalog_stems:
             for link_match in WIKI_LINK_RE.finditer(text):
                 concept = link_match.group(1).strip()
                 # Skip empty, relative path links, and external URLs
                 if not concept or concept.startswith("http") or "/" in concept or concept.startswith("."):
                     continue
-                if concept not in catalog_titles:
+                
+                # Check match against title, filename stem, or normalized version
+                normalized_concept = concept.replace("-", " ").replace("_", " ").strip().lower()
+                
+                match_found = False
+                if concept in catalog_titles or concept in catalog_stems:
+                    match_found = True
+                else:
+                    for title in catalog_titles:
+                        if title.replace("-", " ").replace("_", " ").strip().lower() == normalized_concept:
+                            match_found = True
+                            break
+                    if not match_found:
+                        for stem in catalog_stems:
+                            if stem.replace("-", " ").replace("_", " ").strip().lower() == normalized_concept:
+                                match_found = True
+                                break
+                                
+                if not match_found:
                     warnings.append(
                         f"{rel}: [[{concept}]] not found in catalog. "
                         "Create the note first, then run `build`."

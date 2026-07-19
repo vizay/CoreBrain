@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "9e48b220fcbf1a03",
+        "id": "8ddcbae0dccce7f7",
         "type": "tabs",
         "children": [
           {
-            "id": "9c06ab9f2b012091",
+            "id": "046e80a88b819404",
             "type": "leaf",
             "state": {
               "type": "graph",
@@ -187,8 +187,9 @@
       "bases:Create new base": false
     }
   },
-  "active": "9c06ab9f2b012091",
+  "active": "046e80a88b819404",
   "lastOpenFiles": [
+    "Local-Vault-Starter-Kit/Schema/AGENTS.md",
     "Wiki/ADR-Adoption-and-Practices.md",
     "Wiki/AD-Definition-of-Done.md",
     "Wiki/AD-Definition-of-Ready.md",
@@ -213,7 +214,6 @@
     "Wiki/Hub-Spoke-Architecture.md",
     "Wiki/LLM-Wiki.md",
     "262588213843476.md",
-    "Wiki/Wanderloots.md",
-    "Wiki/Raw-Wiki-Schema-Architecture.md"
+    "Wiki/Wanderloots.md"
   ]
 }

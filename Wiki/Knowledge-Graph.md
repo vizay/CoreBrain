@@ -30,7 +30,7 @@ A knowledge graph is built from three atomic elements:
 
 Knowledge graphs scale by iteration: each triple connects to others, forming a compounding map that grows with every addition. Notable real-world examples include Google's Knowledge Graph (powering the side panel in search results) and Wikipedia (where every hyperlinked term is a node).
 
-In Obsidian, a knowledge graph emerges naturally from `[[wikilinks]]`: each linked concept becomes a node, and the link itself is the edge. The structure is not designed upfront — it is what happens when notes are taken specifically about the relationships between concepts.
+In Obsidian, a knowledge graph emerges naturally from double-bracketed wikilinks: each linked concept becomes a node, and the link itself is the edge. The structure is not designed upfront — it is what happens when notes are taken specifically about the relationships between concepts.
 
 ## Key Points
 

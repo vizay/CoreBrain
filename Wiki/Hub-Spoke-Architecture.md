@@ -37,7 +37,7 @@ The author (Wanderloots) describes a similar personal separation: "I like to kee
 - The CoreBrain is the hub: universal, project-agnostic, shared across all spokes.
 - Spoke vaults are project-local: focused, isolated, deployed alongside specific codebases or workstreams.
 - `Core: Concept Name` is the linking convention from a spoke to a hub concept (double-bracket wikilink with Core: prefix).
-- Standard `[[Concept Name]]` links reference local spoke concepts.
+- Standard double-bracketed links (without a prefix) reference local spoke concepts.
 - Agents in spoke vaults should be firewalled from other vaults (Obsidian safe system).
 - The `Local-Vault-Starter-Kit` in CoreBrain provides the template for deploying a new spoke.
 
