@@ -53,7 +53,7 @@ The lint command validates:
 - YAML frontmatter exists and is well-formed on every `.md` file in `Wiki/`.
 - All `tags` fields are non-empty arrays of lowercase strings.
 - All entries in the `sources` array resolve to real files in `Raw/Sources/`.
-- All `[[Core: Concept Name]]` cross-references appear in `Wiki/catalog.jsonl`.
+- All `[[Concept Name]]` wiki links resolve to notes that exist in `Wiki/catalog.jsonl`.
 
 Fix all lint errors before committing. Lint warnings do not block commits but must
 be logged via `python scripts/wiki_tool.py log`.
@@ -81,4 +81,4 @@ When referencing a concept, do **not** use prefixes like `Core:`. Use standard T
 | Sources array non-empty | `wiki_tool.py lint` (frontmatter check) |
 | Catalog queried first | Agent self-discipline + skill prompt |
 | Clean lint before commit | `wiki_tool.py lint` (pre-commit gate) |
-| `[[Core: ...]]` format | `wiki_tool.py lint` (regex + catalog check) |
+| `[[Title Case]]` link validation | `wiki_tool.py lint` (catalog check) |

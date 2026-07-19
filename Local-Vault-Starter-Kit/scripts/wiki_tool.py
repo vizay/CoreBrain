@@ -39,10 +39,10 @@ LOG_FILE = WIKI_DIR / "log.md"
 # YAML frontmatter helpers
 # ---------------------------------------------------------------------------
 FRONTMATTER_RE = re.compile(r"^---\s*\n(.*?)\n---\s*\n", re.DOTALL)
-CORE_REF_RE = re.compile(r"\[\[Core:\s+(.+?)\]\]")
-# Matches the exact cross-vault format: [[Core: Title Case Name]]
-CORE_REF_STRICT_RE = re.compile(r"\[\[Core: [A-Z][^\]]+\]\]")
-CORE_REF_ANY_RE = re.compile(r"\[\[core[:\s].*?\]\]", re.IGNORECASE)
+# Matches any [[Core: ...]] variant (forbidden in this vault — see AGENTS.md Rule 5)
+CORE_REF_FORBIDDEN_RE = re.compile(r"\[\[Core:[^\]]+\]\]", re.IGNORECASE)
+# Matches standard [[Concept Name]] wiki links
+WIKI_LINK_RE = re.compile(r"\[\[([^\]|#]+?)(?:[|#][^\]]*)?\]\]")
 
 
 def _parse_frontmatter(text: str) -> dict | None:
@@ -147,7 +147,7 @@ def cmd_lint(args) -> int:
     warnings: list[str] = []
     md_files = sorted(WIKI_DIR.rglob("*.md"))
 
-    # Load catalog for [[Core: ...]] validation
+    # Load catalog titles for [[Concept]] link validation
     catalog_titles: set[str] = set()
     if CATALOG_FILE.exists():
         with CATALOG_FILE.open(encoding="utf-8") as f:
@@ -213,24 +213,27 @@ def cmd_lint(args) -> int:
                     if Path(src).name not in raw_source_files and src not in raw_source_files:
                         errors.append(f"{rel}: Source `{src}` not found in Raw/Sources/.")
 
-        # ── 5. [[Core: Concept]] format validation ─────────────────────────
-        all_core_refs = CORE_REF_ANY_RE.findall(text)
-        strict_core_refs = CORE_REF_STRICT_RE.findall(text)
-        if len(all_core_refs) != len(strict_core_refs):
+        # ── 5. Standard [[Concept]] link validation ────────────────────────
+        # 5a. Flag any forbidden [[Core: ...]] references (AGENTS.md Rule 5)
+        for forbidden in CORE_REF_FORBIDDEN_RE.finditer(text):
             errors.append(
-                f"{rel}: One or more [[Core: ...]] references have incorrect formatting. "
-                "Required: [[Core: Title Case Name]] with a space after the colon."
+                f"{rel}: Forbidden link `{forbidden.group()}` — "
+                "do not use the Core: prefix inside this vault (AGENTS.md Rule 5). "
+                "Use [[Concept Name]] instead."
             )
 
-        # Validate that referenced concepts exist in the catalog
-        for ref_match in CORE_REF_RE.finditer(text):
-            concept = ref_match.group(1).strip()
-            full_title = f"Core: {concept}"
-            if catalog_titles and concept not in catalog_titles and full_title not in catalog_titles:
-                warnings.append(
-                    f"{rel}: [[Core: {concept}]] not found in catalog. "
-                    "Run `build` after creating the concept note."
-                )
+        # 5b. Warn when a [[Concept]] link doesn't resolve to a known catalog title
+        if catalog_titles:
+            for link_match in WIKI_LINK_RE.finditer(text):
+                concept = link_match.group(1).strip()
+                # Skip empty, relative path links, and external URLs
+                if not concept or concept.startswith("http") or "/" in concept or concept.startswith("."):
+                    continue
+                if concept not in catalog_titles:
+                    warnings.append(
+                        f"{rel}: [[{concept}]] not found in catalog. "
+                        "Create the note first, then run `build`."
+                    )
 
     # ── Report ─────────────────────────────────────────────────────────────
     total = len([p for p in md_files if p.name != "log.md"])
