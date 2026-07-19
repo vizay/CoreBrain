@@ -4,17 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "5173a87d16077de6",
+        "id": "15651a420f5dea0c",
         "type": "tabs",
         "children": [
           {
-            "id": "904d55a7e61151e4",
+            "id": "736383d53ce39059",
             "type": "leaf",
             "state": {
-              "type": "empty",
+              "type": "graph",
               "state": {},
-              "icon": "lucide-file",
-              "title": "New tab"
+              "icon": "lucide-git-fork",
+              "title": "Graph view"
             }
           }
         ]
@@ -49,7 +49,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "Core",
+                "query": "",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -80,8 +80,7 @@
               "title": "Graph view"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -188,8 +187,10 @@
       "bases:Create new base": false
     }
   },
-  "active": "904d55a7e61151e4",
+  "active": "736383d53ce39059",
   "lastOpenFiles": [
+    "Wiki/log.md",
+    "Concept.md",
     "Wiki/_lint_test.md",
     "Schema/AGENTS.md",
     "_templates/wiki-note.md",
