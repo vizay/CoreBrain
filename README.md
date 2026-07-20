@@ -7,7 +7,7 @@
 
 ## 📖 What is CoreBrain?
 
-**CoreBrain** is a structured, agent-friendly knowledge base designed to serve as a persistent memory layer for Agentic AI development. When working with AI coding assistants (like Antigravity, Cursor, or Devin), context windows often get bloated, and AI agents frequently forget overarching architectural decisions, syntax preferences, or global project rules.
+**CoreBrain** is a structured, distributed, agent-friendly knowledge base designed to serve as a persistent memory layer for Agentic AI development. When working with AI coding assistants (like Antigravity, Cursor, or Devin), context windows often get bloated, and AI agents frequently forget overarching architectural decisions, syntax preferences, or global project rules.
 
 CoreBrain solves this by implementing an **LLM Wiki**: a knowledge management system where raw, immutable source materials are synthesized into dense, interconnected markdown notes by the AI itself. This enables your AI agents to query, learn, and abide by a unified set of rules and architectural decisions across any number of projects.
 
@@ -21,7 +21,7 @@ A massive and appreciative thank you to the YouTuber and creator **[Wanderloots]
 CoreBrain operates on a **Hub-and-Spoke Architecture**, supported by deterministic tooling:
 
 - **The Hub (CoreBrain)**: This repository. It stores universal, project-agnostic knowledge (e.g., standard frameworks like FastAPI, global coding standards, and Architectural Decision Records). The Hub compiles its knowledge into a static JSON catalog that can be served over the web.
-- **The Spokes (Local Vaults)**: Individual application repositories. Each Spoke contains a lightweight initialized version of the wiki (bootstrapped from the Hub). It holds *local*, project-specific knowledge but maintains a read-only dependency on the Hub's universal catalog.
+- **The Spokes (Local Vaults)**: Individual application repositories. Each Spoke contains a lightweight initialized version of the wiki (bootstrapped from the Hub). It holds *local*, project-specific knowledge but maintains a read-only dependency on the Hub's universal catalog. This read-only connection acts as a firewall, ensuring that local project nuances or accidental AI edits cannot pollute your global source of truth.
 - **Deterministic Tooling**: To prevent AI hallucination and enforce strict structure, CoreBrain relies on standard Python (`wiki_tool.py`) for all mission-critical operations like building the knowledge catalog, linting rules, and searching. It never trusts the AI to manually manage state.
 
 This design ensures that when you update a global rule in your CoreBrain, all of your individual agentic projects (Spokes) can instantly reference the updated knowledge securely.
@@ -97,6 +97,11 @@ Because AI agents can sometimes be unpredictable, CoreBrain relies on standard P
 - **`build`**: Compiles the `Wiki/` directory into a lightweight `catalog.jsonl` for fast semantic search.
 - **`search-catalog`**: Allows the AI to query the knowledge base securely before reading broad context (Rule 3: Query First).
 - **`lint`**: A strict pre-commit gate that ensures the AI hasn't hallucinated links, forgotten frontmatter, or modified raw sources.
+
+### Read-Only Firewalling & Hosting
+A critical design feature of CoreBrain is the "air gap" between the Hub and the Spokes. When a Spoke queries the Hub (`search-hub`), it parses the downloaded JSON catalog from the Hub's static site deployment. It does not have write access to the Hub repository. This ensures that a rogue agent working on a specific web application doesn't accidentally hallucinate or modify global architectural guidelines.
+
+While the default setup relies on **GitHub Pages** (via the included `.github/workflows/deploy-site.yml`) to serve this static catalog, the architecture is entirely agnostic. You can serve the Hub's `site/` directory from AWS S3, Vercel, Netlify, or any traditional web server. If you choose to host it elsewhere, you simply need to adjust or replace the GitHub Action with your preferred deployment method.
 
 ---
 
