@@ -98,9 +98,10 @@ Because AI agents can sometimes be unpredictable, CoreBrain relies on standard P
 - **`search-catalog`**: Allows the AI to query the knowledge base securely before reading broad context (Rule 3: Query First).
 - **`lint`**: A strict pre-commit gate that ensures the AI hasn't hallucinated links, forgotten frontmatter, or modified raw sources.
 
-### Read-Only Firewalling & Hosting
+### Read-Only Firewalling
 A critical design feature of CoreBrain is the "air gap" between the Hub and the Spokes. When a Spoke queries the Hub (`search-hub`), it parses the downloaded JSON catalog from the Hub's static site deployment. It does not have write access to the Hub repository. This ensures that a rogue agent working on a specific web application doesn't accidentally hallucinate or modify global architectural guidelines.
 
+### Hosting the static wiki content from the Hub
 While the default setup relies on **GitHub Pages** (via the included `.github/workflows/deploy-site.yml`) to serve this static catalog, the architecture is entirely agnostic. You can serve the Hub's `site/` directory from AWS S3, Vercel, Netlify, or any traditional web server. If you choose to host it elsewhere, you simply need to adjust or replace the GitHub Action with your preferred deployment method.
 
 ---
