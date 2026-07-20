@@ -53,8 +53,6 @@ Fix **all** errors before continuing. See the `wiki-lint` skill for detailed fix
 A note is **stale** if:
 - Its `updated_date` is more than 90 days old **and** it has no `sources` entries that
   have been updated since
-- Its `sources` point to files in `Raw/Sources/` that now have `processed: true` but
-  the note was never updated to reflect newer versions
 
 For each stale note found:
 1. Check if its raw source has been updated or supplemented
@@ -86,7 +84,7 @@ Search for orphans by scanning all Wiki notes for references to each other.
 ### 6. Check Raw/Sources for Unprocessed Files
 
 ```bash
-# Scan Raw/Sources/ for files with: processed: false
+python scripts/wiki_tool.py list-unprocessed
 ```
 
 List all unprocessed sources and inform the user. Suggest running `wiki-ingest`
