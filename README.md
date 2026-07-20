@@ -59,6 +59,7 @@ When starting a new software project (a Spoke), you can initialize its local bra
 1. Open your new project repository in your Agentic AI environment.
 2. Instruct the AI: *"Please initialize a CoreBrain Spoke by reading this bootstrap file: `https://[YOUR-GITHUB-USERNAME].github.io/CoreBrain/bootstrap.md`"* 
 3. The AI will automatically download the initialization script, set up the local wiki structure, install git hooks, and download your Hub's global knowledge cache.
+4. **Open Obsidian**, select **"Open folder as vault"**, and point it to your Spoke repository so you can view your local knowledge graph!
 
 ---
 
