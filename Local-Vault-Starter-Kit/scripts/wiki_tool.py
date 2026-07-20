@@ -441,6 +441,64 @@ def cmd_search_hub(args) -> int:
     return 0
 
 # ---------------------------------------------------------------------------
+# Command: upgrade-tooling
+# ---------------------------------------------------------------------------
+def cmd_upgrade_tooling(args) -> int:
+    """Download spoke-starter.zip and upgrade core files without breaking local rules."""
+    import urllib.request
+    import urllib.error
+    import zipfile
+    import tempfile
+    import shutil
+    
+    HUB_CONFIG_FILE = VAULT_ROOT / "Schema" / "hub-config.json"
+    
+    if not HUB_CONFIG_FILE.exists():
+        print(f"[upgrade-tooling] Error: {HUB_CONFIG_FILE.relative_to(VAULT_ROOT)} not found.", file=sys.stderr)
+        return 1
+        
+    try:
+        config = json.loads(HUB_CONFIG_FILE.read_text(encoding="utf-8"))
+        hub_url = config.get("hub_pages_url")
+        if not hub_url:
+            print("[upgrade-tooling] Error: 'hub_pages_url' missing in hub-config.json.", file=sys.stderr)
+            return 1
+    except Exception as e:
+        print(f"[upgrade-tooling] Error reading hub-config.json: {e}", file=sys.stderr)
+        return 1
+
+    zip_url = hub_url.rstrip("/") + "/spoke-starter.zip"
+    print(f"[upgrade-tooling] Fetching tooling upgrade from {zip_url} ...")
+    
+    try:
+        req = urllib.request.Request(zip_url, headers={'User-Agent': 'Mozilla/5.0'})
+        with urllib.request.urlopen(req) as response:
+            zip_data = response.read()
+    except Exception as e:
+        print(f"[upgrade-tooling] Failed to download starter kit: {e}", file=sys.stderr)
+        return 1
+        
+    with tempfile.TemporaryDirectory() as tmpdir:
+        tmp_path = pathlib.Path(tmpdir)
+        zip_path = tmp_path / "spoke-starter.zip"
+        zip_path.write_bytes(zip_data)
+        
+        with zipfile.ZipFile(zip_path, 'r') as z:
+            for member in z.namelist():
+                # Ignore local configuration files
+                if member.endswith("LOCAL-AGENTS.md"):
+                    continue
+                # Also do not overwrite hub-config.json if it exists
+                if member.endswith("hub-config.json") and HUB_CONFIG_FILE.exists():
+                    continue
+                    
+                # Extract file
+                z.extract(member, VAULT_ROOT)
+                
+    print("[upgrade-tooling] Successfully upgraded CoreBrain tooling. Local rules preserved.")
+    return 0
+
+# ---------------------------------------------------------------------------
 # CLI entry point
 # ---------------------------------------------------------------------------
 def main() -> int:
@@ -471,6 +529,9 @@ def main() -> int:
     # search-hub
     sp_search_hub = subparsers.add_parser("search-hub", help="Search the cached CoreBrain catalog")
     sp_search_hub.add_argument("--query", required=True, help="Search query string")
+    
+    # upgrade-tooling
+    subparsers.add_parser("upgrade-tooling", help="Upgrade local spoke tooling from hub")
 
     args = parser.parse_args()
 
@@ -481,6 +542,7 @@ def main() -> int:
         "log": cmd_log,
         "refresh-hub": cmd_refresh_hub,
         "search-hub": cmd_search_hub,
+        "upgrade-tooling": cmd_upgrade_tooling,
     }
     return dispatch[args.command](args)
 

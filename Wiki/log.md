@@ -100,3 +100,9 @@ Updated wiki note: ADR-Read-Only-Firewalling.md. Source: Raw/Sources/ADR - Read-
 
 ---
 
+## 2026-07-20T01:18:41Z — Ingest ADR - Agentic First Bootstrapping for Spokes
+
+Added new ADR defining the bootstrapping process
+
+---
+

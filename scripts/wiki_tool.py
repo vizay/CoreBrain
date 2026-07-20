@@ -497,7 +497,100 @@ def cmd_build_site(args) -> int:
     with (SITE_DIR / "catalog.json").open("w", encoding="utf-8") as f:
         json.dump(catalog_entries, f, ensure_ascii=False, indent=2)
         
+    # --- Agentic First Bootstrapping Generation ---
+    hub_url = args.url.rstrip('/') if args.url else "https://vizay.github.io/CoreBrain"
+    
+    # 1. Package the Starter Kit into spoke-starter.zip
+    import zipfile
+    import os
+    STARTER_KIT_DIR = VAULT_ROOT / "Local-Vault-Starter-Kit"
+    ZIP_PATH = SITE_DIR / "spoke-starter.zip"
+    if STARTER_KIT_DIR.exists():
+        with zipfile.ZipFile(ZIP_PATH, 'w', zipfile.ZIP_DEFLATED) as zipf:
+            for root, dirs, files in os.walk(STARTER_KIT_DIR):
+                for file in files:
+                    file_path = Path(root) / file
+                    # Relative path inside the zip should not include "Local-Vault-Starter-Kit"
+                    arcname = file_path.relative_to(STARTER_KIT_DIR)
+                    zipf.write(file_path, arcname)
+                    
+    # 2. Generate bootstrap.md
+    python_script = f'''import urllib.request
+import zipfile
+import tempfile
+import pathlib
+import json
+import os
+import subprocess
+import sys
+
+HUB_URL = "{hub_url}"
+ZIP_URL = f"{{HUB_URL}}/spoke-starter.zip"
+
+print(f"Downloading spoke-starter.zip from {{ZIP_URL}}...")
+req = urllib.request.Request(ZIP_URL, headers={{'User-Agent': 'Mozilla/5.0'}})
+with urllib.request.urlopen(req) as response:
+    zip_data = response.read()
+
+with tempfile.TemporaryDirectory() as tmpdir:
+    zip_path = pathlib.Path(tmpdir) / "spoke-starter.zip"
+    zip_path.write_bytes(zip_data)
+    with zipfile.ZipFile(zip_path, 'r') as z:
+        z.extractall(".")
+
+print("Configuring Schema/hub-config.json...")
+os.makedirs("Schema", exist_ok=True)
+with open("Schema/hub-config.json", "w") as f:
+    json.dump({{"hub_pages_url": HUB_URL}}, f, indent=2)
+
+print("Ensuring git is initialized...")
+if not os.path.exists(".git"):
+    subprocess.run(["git", "init"])
+
+print("Installing pre-commit hook...")
+hook_dir = pathlib.Path(".git/hooks")
+if hook_dir.exists():
+    hook_path = hook_dir / "pre-commit"
+    hook_content = """#!/bin/sh
+python scripts/wiki_tool.py lint
+if [ $? -ne 0 ]; then
+  echo "Wiki lint failed. Fix errors before committing."
+  exit 1
+fi
+"""
+    hook_path.write_text(hook_content, encoding="utf-8")
+    # Make executable on Unix
+    if os.name == 'posix':
+        os.chmod(hook_path, 0o755)
+
+print("Hydrating knowledge from CoreBrain hub...")
+subprocess.run([sys.executable, "scripts/wiki_tool.py", "refresh-hub"])
+
+print("Spoke initialization complete!")
+'''
+
+    bootstrap_content = f"""# Spoke Initialization Protocol
+
+You are an agentic AI initializing a CoreBrain Spoke in the user's repository. Follow these steps exactly:
+
+1. Save the following python script to a temporary file named `init_spoke.py` in the root of the project:
+```python
+{python_script}
+```
+
+2. Execute the script:
+```bash
+python init_spoke.py
+```
+
+3. Delete `init_spoke.py` after it finishes successfully.
+
+4. Inform the user that the Spoke is successfully initialized, the catalog has been downloaded, and you are ready to work.
+"""
+    (SITE_DIR / "bootstrap.md").write_text(bootstrap_content, encoding="utf-8")
+        
     print(f"[build-site] Built static site with {len(entries)} notes -> {SITE_DIR.relative_to(VAULT_ROOT)}")
+    print(f"[build-site] Generated spoke-starter.zip and bootstrap.md using HUB_URL={hub_url}")
     return 0
 
 # ---------------------------------------------------------------------------
@@ -526,7 +619,8 @@ def main() -> int:
     sp_log.add_argument("--details", default="", help="Additional details")
 
     # build-site
-    subparsers.add_parser("build-site", help="Compile Wiki/ into static HTML in site/")
+    sp_build_site = subparsers.add_parser("build-site", help="Compile Wiki/ into static HTML in site/")
+    sp_build_site.add_argument("--url", help="The GitHub Pages URL where the hub is hosted")
 
     args = parser.parse_args()
 

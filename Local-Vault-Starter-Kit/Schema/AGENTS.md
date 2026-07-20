@@ -1,6 +1,10 @@
 # CoreBrain LLM Wiki — Agent Rules (AGENTS.md)
 
-These rules are **non-negotiable** and apply to every agent interaction within this vault.
+> **IMPORTANT**: These are the global CoreBrain ecosystem rules. This file (`Schema/AGENTS.md`) is maintained by the CoreBrain hub and will be automatically overwritten when `upgrade-tooling` is run.
+> 
+> **In addition to these global rules, you MUST also follow any project-specific rules defined in `Schema/LOCAL-AGENTS.md`.**
+
+These global rules are **non-negotiable** and apply to every agent interaction within this vault.
 All agents, automated scripts, and human contributors must comply.
 
 ---
