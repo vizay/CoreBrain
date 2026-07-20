@@ -24,28 +24,33 @@ Activate this skill when the user:
 Follow these steps **in order**. Do not answer from general knowledge before completing
 Step 1 and Step 2. This is AGENTS.md Rule 3 — Query First.
 
-### Step 1 — Search the Catalog
+### Step 1 — Search the Local Catalog and Universal Hub
 
-Run the search tool with the key terms from the user's question:
-
+Run the search tool against the local vault:
 ```bash
 python scripts/wiki_tool.py search-catalog --query "<user question keywords>"
 ```
 
-If the first query returns 0 results, try alternative phrasings or synonyms before
-concluding that no relevant notes exist.
+Then, run the search tool against the CoreBrain hub cache:
+```bash
+python scripts/wiki_tool.py search-hub --query "<user question keywords>"
+```
+If the hub cache is missing or stale, run `python scripts/wiki_tool.py refresh-hub` first.
 
 ### Step 2 — Read Relevant Notes
 
-Open and read each Wiki note returned by the search. Pay attention to:
+For **local** results, open and read the `Path` to each Wiki note returned by the search.
+For **hub** results, use your `read_url_content` tool to fetch the HTML content from the `URL` returned by `search-hub`.
+
+Pay attention to:
 - The `sources` array → which raw sources back this claim
 - `[[Core: ...]]` links → related concepts to explore further
 - The `updated_date` → how recent the information is
 
-If a linked `[[Core: Concept]]` seems relevant, search for it too:
+If a linked `[[Core: Concept]]` seems relevant, search for it too using `search-hub`:
 
 ```bash
-python scripts/wiki_tool.py search-catalog --query "<linked concept>"
+python scripts/wiki_tool.py search-hub --query "<linked concept>"
 ```
 
 ### Step 3 — Synthesise the Answer

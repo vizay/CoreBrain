@@ -348,6 +348,159 @@ def cmd_log(args) -> int:
 
 
 # ---------------------------------------------------------------------------
+# Command: build-site
+# ---------------------------------------------------------------------------
+def _slugify(text: str) -> str:
+    return text.replace(" ", "-").replace("_", "-").lower()
+
+def _simple_md_to_html(md_text: str, catalog_titles: set) -> str:
+    import html
+    # Very basic Markdown to HTML
+    lines = md_text.splitlines()
+    html_lines = []
+    in_list = False
+    
+    for line in lines:
+        line_stripped = line.strip()
+        if not line_stripped:
+            if in_list:
+                html_lines.append("</ul>")
+                in_list = False
+            html_lines.append("<br>")
+            continue
+            
+        # Headings
+        if line_stripped.startswith("### "):
+            html_lines.append(f"<h3>{html.escape(line_stripped[4:])}</h3>")
+        elif line_stripped.startswith("## "):
+            html_lines.append(f"<h2>{html.escape(line_stripped[3:])}</h2>")
+        elif line_stripped.startswith("# "):
+            html_lines.append(f"<h1>{html.escape(line_stripped[2:])}</h1>")
+        elif line_stripped.startswith("- "):
+            if not in_list:
+                html_lines.append("<ul>")
+                in_list = True
+            html_lines.append(f"<li>{html.escape(line_stripped[2:])}</li>")
+        elif line_stripped.startswith("> "):
+            html_lines.append(f"<blockquote>{html.escape(line_stripped[2:])}</blockquote>")
+        else:
+            if in_list:
+                html_lines.append("</ul>")
+                in_list = False
+            html_lines.append(f"<p>{html.escape(line_stripped)}</p>")
+            
+    if in_list:
+        html_lines.append("</ul>")
+
+    html_text = "\n".join(html_lines)
+    
+    # Process wiki links [[Concept]]
+    def link_repl(match):
+        concept = match.group(1).strip()
+        slug = _slugify(concept)
+        return f'<a href="{slug}.html">{html.escape(concept)}</a>'
+        
+    html_text = re.sub(r"\[\[([^\]|#]+?)(?:[|#][^\]]*)?\]\]", link_repl, html_text)
+    
+    # Process standard links [Text](url)
+    html_text = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", lambda m: f'<a href="{m.group(2)}">{m.group(1)}</a>', html_text)
+    
+    return html_text
+
+def cmd_build_site(args) -> int:
+    """Compile Wiki/ into static HTML in site/."""
+    SITE_DIR = VAULT_ROOT / "site"
+    SITE_DIR.mkdir(parents=True, exist_ok=True)
+    
+    md_files = sorted(WIKI_DIR.rglob("*.md"))
+    entries = []
+    
+    # Parse notes
+    for path in md_files:
+        if path.name == "log.md":
+            continue
+        text = path.read_text(encoding="utf-8-sig", errors="replace")
+        fm = _parse_frontmatter(text)
+        title = (fm or {}).get("title") or path.stem.replace("-", " ").replace("_", " ").title()
+        summary = _extract_summary(text)
+        tags = (fm or {}).get("tags", [])
+        if isinstance(tags, str): tags = [tags]
+        
+        slug = _slugify(title)
+        
+        entries.append({
+            "title": title,
+            "slug": slug,
+            "summary": summary,
+            "tags": tags,
+            "content": text,
+            "path": path.relative_to(VAULT_ROOT).as_posix()
+        })
+        
+    catalog_titles = {e["title"] for e in entries}
+    
+    # Generate HTML pages
+    css = """
+    body { font-family: sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+    a { color: #0366d6; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    blockquote { border-left: 4px solid #dfe2e5; padding-left: 16px; color: #6a737d; }
+    .nav { margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #eaecef; }
+    """
+    
+    for entry in entries:
+        html_content = _simple_md_to_html(entry["content"], catalog_titles)
+        page_html = f"""<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>{entry['title']} - CoreBrain</title>
+<style>{css}</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">← Back to Index</a></div>
+{html_content}
+</body>
+</html>"""
+        (SITE_DIR / f"{entry['slug']}.html").write_text(page_html, encoding="utf-8")
+        
+    # Generate index.html
+    index_links = []
+    for entry in entries:
+        index_links.append(f'<li><a href="{entry["slug"]}.html">{entry["title"]}</a> - {entry["summary"]}</li>')
+    
+    index_html = f"""<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>CoreBrain Index</title>
+<style>{css}</style>
+</head>
+<body>
+<h1>CoreBrain Knowledge Graph</h1>
+<p>This is the compiled, read-only static site of the CoreBrain.</p>
+<ul>
+{"".join(index_links)}
+</ul>
+</body>
+</html>"""
+    (SITE_DIR / "index.html").write_text(index_html, encoding="utf-8")
+    
+    # Write catalog.json (for agents to consume)
+    # Strip full content to keep catalog small
+    catalog_entries = []
+    for entry in entries:
+        e = entry.copy()
+        e.pop("content", None)
+        catalog_entries.append(e)
+        
+    with (SITE_DIR / "catalog.json").open("w", encoding="utf-8") as f:
+        json.dump(catalog_entries, f, ensure_ascii=False, indent=2)
+        
+    print(f"[build-site] Built static site with {len(entries)} notes -> {SITE_DIR.relative_to(VAULT_ROOT)}")
+    return 0
+
+# ---------------------------------------------------------------------------
 # CLI entry point
 # ---------------------------------------------------------------------------
 def main() -> int:
@@ -372,6 +525,9 @@ def main() -> int:
     sp_log.add_argument("--action", required=True, help="Short action title")
     sp_log.add_argument("--details", default="", help="Additional details")
 
+    # build-site
+    subparsers.add_parser("build-site", help="Compile Wiki/ into static HTML in site/")
+
     args = parser.parse_args()
 
     dispatch = {
@@ -379,9 +535,11 @@ def main() -> int:
         "lint": cmd_lint,
         "search-catalog": cmd_search_catalog,
         "log": cmd_log,
+        "build-site": cmd_build_site,
     }
     return dispatch[args.command](args)
 
 
 if __name__ == "__main__":
     sys.exit(main())
+

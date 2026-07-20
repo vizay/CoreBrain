@@ -348,6 +348,99 @@ def cmd_log(args) -> int:
 
 
 # ---------------------------------------------------------------------------
+# Command: refresh-hub
+# ---------------------------------------------------------------------------
+def cmd_refresh_hub(args) -> int:
+    """Download catalog.json from the CoreBrain static site into the local hub cache."""
+    import urllib.request
+    import urllib.error
+    
+    HUB_CONFIG_FILE = VAULT_ROOT / "Schema" / "hub-config.json"
+    HUB_CACHE_DIR = VAULT_ROOT / "Schema" / "hub-cache"
+    
+    if not HUB_CONFIG_FILE.exists():
+        print(f"[refresh-hub] Error: {HUB_CONFIG_FILE.relative_to(VAULT_ROOT)} not found.", file=sys.stderr)
+        return 1
+        
+    try:
+        config = json.loads(HUB_CONFIG_FILE.read_text(encoding="utf-8"))
+        hub_url = config.get("hub_pages_url")
+        if not hub_url:
+            print("[refresh-hub] Error: 'hub_pages_url' missing in hub-config.json.", file=sys.stderr)
+            return 1
+    except Exception as e:
+        print(f"[refresh-hub] Error reading hub-config.json: {e}", file=sys.stderr)
+        return 1
+
+    catalog_url = hub_url.rstrip("/") + "/catalog.json"
+    print(f"[refresh-hub] Fetching from {catalog_url} ...")
+    
+    try:
+        req = urllib.request.Request(catalog_url, headers={'User-Agent': 'Mozilla/5.0'})
+        with urllib.request.urlopen(req) as response:
+            data = json.loads(response.read().decode('utf-8'))
+    except Exception as e:
+        print(f"[refresh-hub] Failed to download catalog: {e}", file=sys.stderr)
+        return 1
+        
+    HUB_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    cache_file = HUB_CACHE_DIR / "catalog.json"
+    
+    with cache_file.open("w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+        
+    print(f"[refresh-hub] Successfully cached {len(data)} CoreBrain notes to {cache_file.relative_to(VAULT_ROOT)}")
+    return 0
+
+# ---------------------------------------------------------------------------
+# Command: search-hub
+# ---------------------------------------------------------------------------
+def cmd_search_hub(args) -> int:
+    """Search the cached CoreBrain catalog for --query."""
+    CACHE_FILE = VAULT_ROOT / "Schema" / "hub-cache" / "catalog.json"
+    
+    if not CACHE_FILE.exists():
+        print("[search-hub] Hub cache not found. Run `refresh-hub` first.", file=sys.stderr)
+        return 1
+        
+    query = args.query.lower()
+    tokens = query.split()
+    results = []
+
+    try:
+        with CACHE_FILE.open(encoding="utf-8") as f:
+            catalog = json.load(f)
+    except Exception as e:
+        print(f"[search-hub] Error reading cache: {e}", file=sys.stderr)
+        return 1
+
+    for entry in catalog:
+        haystack = " ".join([
+            entry.get("title", ""),
+            entry.get("summary", ""),
+            " ".join(entry.get("tags", [])),
+        ]).lower()
+        score = sum(1 for token in tokens if token in haystack)
+        if score > 0:
+            results.append((score, entry))
+
+    results.sort(key=lambda x: x[0], reverse=True)
+
+    if not results:
+        print(f"[search-hub] No results for query: '{args.query}'")
+        return 0
+
+    HUB_CONFIG_FILE = VAULT_ROOT / "Schema" / "hub-config.json"
+    print(f"[search-hub] {len(results)} result(s) for '{args.query}':\n")
+    for rank, (score, entry) in enumerate(results, 1):
+        print(f"  [{rank}] Core: {entry.get('title', '(no title)')}")
+        print(f"       Summary : {entry.get('summary', '')[:120]}")
+        print(f"       Tags    : {', '.join(entry.get('tags', []))}")
+        print(f"       URL     : {json.loads(HUB_CONFIG_FILE.read_text(encoding='utf-8')).get('hub_pages_url', '').rstrip('/')}/{entry.get('slug', '')}.html" if HUB_CONFIG_FILE.exists() else "")
+        print()
+    return 0
+
+# ---------------------------------------------------------------------------
 # CLI entry point
 # ---------------------------------------------------------------------------
 def main() -> int:
@@ -372,6 +465,13 @@ def main() -> int:
     sp_log.add_argument("--action", required=True, help="Short action title")
     sp_log.add_argument("--details", default="", help="Additional details")
 
+    # refresh-hub
+    subparsers.add_parser("refresh-hub", help="Download the latest CoreBrain catalog")
+
+    # search-hub
+    sp_search_hub = subparsers.add_parser("search-hub", help="Search the cached CoreBrain catalog")
+    sp_search_hub.add_argument("--query", required=True, help="Search query string")
+
     args = parser.parse_args()
 
     dispatch = {
@@ -379,6 +479,8 @@ def main() -> int:
         "lint": cmd_lint,
         "search-catalog": cmd_search_catalog,
         "log": cmd_log,
+        "refresh-hub": cmd_refresh_hub,
+        "search-hub": cmd_search_hub,
     }
     return dispatch[args.command](args)
 

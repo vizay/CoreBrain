@@ -1,0 +1,333 @@
+[
+  {
+    "title": "AD Definition of Done",
+    "slug": "ad-definition-of-done",
+    "summary": "The Definition of Done (DoD) for Architectural Decisions uses the 5-criteria 'ecADR' mnemonic to establish the exit gates for a completed, valid architectural choice.",
+    "tags": [
+      "concept",
+      "agile",
+      "decision-making",
+      "done-criteria"
+    ],
+    "path": "Wiki/AD-Definition-of-Done.md"
+  },
+  {
+    "title": "AD Definition of Ready",
+    "slug": "ad-definition-of-ready",
+    "summary": "The Definition of Ready (DoR) for Architectural Decisions uses the 5-criteria 'START' backronym to determine when a design choice is mature enough to be officially made.",
+    "tags": [
+      "concept",
+      "agile",
+      "decision-making",
+      "readiness"
+    ],
+    "path": "Wiki/AD-Definition-of-Ready.md"
+  },
+  {
+    "title": "ADR Adoption and Practices",
+    "slug": "adr-adoption-and-practices",
+    "summary": "Compiles industry best practices for writing, reviewing, and adopting Architectural Decision Records, including key anti-patterns, criteria normalization, and the five-level AD adoption model.",
+    "tags": [
+      "concept",
+      "best-practices",
+      "adr",
+      "adoption"
+    ],
+    "path": "Wiki/ADR-Adoption-and-Practices.md"
+  },
+  {
+    "title": "ADR - Agent Pointer Routing",
+    "slug": "adr---agent-pointer-routing",
+    "summary": "This Architectural Decision Record establishes the use of pointer files (.agents/AGENTS.md) to redirect agent attention to centralized repository rules.",
+    "tags": [
+      "concept",
+      "adr",
+      "routing",
+      "configuration"
+    ],
+    "path": "Wiki/ADR-Agent-Pointer-Routing.md"
+  },
+  {
+    "title": "ADR - Deterministic Python Tooling",
+    "slug": "adr---deterministic-python-tooling",
+    "summary": "This Architectural Decision Record establishes the use of a deterministic Python command-line utility (wiki_tool.py) to validate, index, and log changes within the LLM Wiki.",
+    "tags": [
+      "concept",
+      "adr",
+      "tooling",
+      "automation"
+    ],
+    "path": "Wiki/ADR-Deterministic-Python-Tooling.md"
+  },
+  {
+    "title": "ADR - Git Hygiene and Version Control",
+    "slug": "adr---git-hygiene-and-version-control",
+    "summary": "This Architectural Decision Record establishes the rule for untracking IDE-specific UI caches and agent ephemeral log files to prevent Git repository pollution.",
+    "tags": [
+      "concept",
+      "adr",
+      "git",
+      "vcs"
+    ],
+    "path": "Wiki/ADR-Git-Hygiene-and-Version-Control.md"
+  },
+  {
+    "title": "ADR - Local Vault Starter Kit",
+    "slug": "adr---local-vault-starter-kit",
+    "summary": "This Architectural Decision Record establishes the use of a distributable scaffolding directory (Local-Vault-Starter-Kit) within the CoreBrain to spin up standardized, hub-compliant spoke vaults.",
+    "tags": [
+      "concept",
+      "adr",
+      "spoke-vault",
+      "scaffolding"
+    ],
+    "path": "Wiki/ADR-Local-Vault-Starter-Kit.md"
+  },
+  {
+    "title": "ADR - Project-Scoped Agent Skills",
+    "slug": "adr---project-scoped-agent-skills",
+    "summary": "This Architectural Decision Record establishes the use of a dedicated .agents directory to store executable workflow skills and global agent rules within version control.",
+    "tags": [
+      "concept",
+      "adr",
+      "agentic-ai",
+      "workflows"
+    ],
+    "path": "Wiki/ADR-Project-Scoped-Agent-Skills.md"
+  },
+  {
+    "title": "ADR - Read-Only Firewalling",
+    "slug": "adr---read-only-firewalling",
+    "summary": "This Architectural Decision Record establishes the enforcement of read-only permissions for spoke vault agents interacting with the central CoreBrain hub.",
+    "tags": [
+      "concept",
+      "adr",
+      "security",
+      "multi-vault"
+    ],
+    "path": "Wiki/ADR-Read-Only-Firewalling.md"
+  },
+  {
+    "title": "ADR - Template Engine Strategy",
+    "slug": "adr---template-engine-strategy",
+    "summary": "This Architectural Decision Record establishes the use of standard file templates (_templates/) as the formatting blueprint for LLM agent operations.",
+    "tags": [
+      "concept",
+      "adr",
+      "templates",
+      "standardization"
+    ],
+    "path": "Wiki/ADR-Template-Engine-Strategy.md"
+  },
+  {
+    "title": "Architectural Decision Record",
+    "slug": "architectural-decision-record",
+    "summary": "An Architectural Decision Record (ADR) is a brief document capturing a single architectural design choice, its rationale, context, and consequences, serving as the persistent log of a project's techni",
+    "tags": [
+      "concept",
+      "architecture",
+      "documentation",
+      "adr"
+    ],
+    "path": "Wiki/Architectural-Decision-Record.md"
+  },
+  {
+    "title": "Architectural Decision",
+    "slug": "architectural-decision",
+    "summary": "An Architectural Decision (AD) is a justified design choice addressing an architecturally significant requirement (ASR), managed through systematic lifecycle steps.",
+    "tags": [
+      "concept",
+      "architecture",
+      "decision-making"
+    ],
+    "path": "Wiki/Architectural-Decision.md"
+  },
+  {
+    "title": "Architecturally Significant Requirement",
+    "slug": "architecturally-significant-requirement",
+    "summary": "An Architecturally Significant Requirement (ASR) is a requirement that has a measurable effect on a computer system's architecture, encompassing both functional and non-functional attributes.",
+    "tags": [
+      "concept",
+      "architecture",
+      "requirements"
+    ],
+    "path": "Wiki/Architecturally-Significant-Requirement.md"
+  },
+  {
+    "title": "CoreBrain Architecture Overview",
+    "slug": "corebrain-architecture-overview",
+    "summary": "This document serves as the high-level Map of Content (MoC) and Whitepaper describing the system design, topology, and 7 design pillars of the CoreBrain vault.",
+    "tags": [
+      "concept",
+      "architecture",
+      "llm-wiki",
+      "moc"
+    ],
+    "path": "Wiki/CoreBrain-Architecture-Overview.md"
+  },
+  {
+    "title": "FastAPI",
+    "slug": "fastapi",
+    "summary": "FastAPI is a modern, high-performance Python web framework for building APIs using standard Python type hints, backed by Pydantic and Starlette.",
+    "tags": [
+      "web-framework",
+      "python",
+      "api",
+      "rest",
+      "openapi"
+    ],
+    "path": "Wiki/FastAPI.md"
+  },
+  {
+    "title": "Graph RAG",
+    "slug": "graph-rag",
+    "summary": "Graph RAG is an advanced retrieval approach that traverses the relationship structure between documents and concepts rather than retrieving flat vector chunks, significantly outperforming standard RAG",
+    "tags": [
+      "graph-rag",
+      "retrieval-augmented-generation",
+      "knowledge-graph",
+      "agentic-ai"
+    ],
+    "path": "Wiki/Graph-RAG.md"
+  },
+  {
+    "title": "Hub-Spoke Architecture",
+    "slug": "hub-spoke-architecture",
+    "summary": "A multi-vault LLM Wiki topology where a central CoreBrain hub holds universal, project-agnostic knowledge, and individual project-specific spoke vaults reference hub concepts via Core-prefixed wikilin",
+    "tags": [
+      "architecture",
+      "llm-wiki",
+      "system-design",
+      "multi-vault"
+    ],
+    "path": "Wiki/Hub-Spoke-Architecture.md"
+  },
+  {
+    "title": "Knowledge Graph",
+    "slug": "knowledge-graph",
+    "summary": "A structured map of knowledge composed of nodes (concepts, entities, events), edges (named relationships), and triples (subject-relationship-object), allowing knowledge to compound and interconnect ov",
+    "tags": [
+      "knowledge-graph",
+      "graph-theory",
+      "knowledge-management"
+    ],
+    "path": "Wiki/Knowledge-Graph.md"
+  },
+  {
+    "title": "LLM Wiki",
+    "slug": "llm-wiki",
+    "summary": "A persistent, compounding knowledge base written and maintained by LLMs that sits between raw source documents and AI tools, replacing per-query RAG retrieval with a pre-compiled, interlinked wiki of ",
+    "tags": [
+      "llm-wiki",
+      "knowledge-management",
+      "agentic-ai"
+    ],
+    "path": "Wiki/LLM-Wiki.md"
+  },
+  {
+    "title": "MADR",
+    "slug": "madr",
+    "summary": "Markdown Architectural Decision Records (MADRs) standardize ADR documenting in Markdown, providing both full and minimal templates optimized for version control and machine readability.",
+    "tags": [
+      "concept",
+      "madr",
+      "template",
+      "documentation"
+    ],
+    "path": "Wiki/MADR.md"
+  },
+  {
+    "title": "OpenAPI",
+    "slug": "openapi",
+    "summary": "OpenAPI (formerly Swagger) is the open standard specification for describing RESTful APIs; FastAPI generates a compliant schema automatically from type-annotated route definitions.",
+    "tags": [
+      "api",
+      "standard",
+      "documentation",
+      "openapi",
+      "swagger"
+    ],
+    "path": "Wiki/OpenAPI.md"
+  },
+  {
+    "title": "Pydantic",
+    "slug": "pydantic",
+    "summary": "Pydantic is a Python data validation library that uses standard type hints to validate, parse, and serialize data at runtime.",
+    "tags": [
+      "python",
+      "validation",
+      "data-modeling",
+      "type-hints"
+    ],
+    "path": "Wiki/Pydantic.md"
+  },
+  {
+    "title": "RAG",
+    "slug": "rag",
+    "summary": "Retrieval-Augmented Generation (RAG) is the standard approach where an LLM converts documents into vector embeddings, retrieves the most similar chunks at query time, and generates an answer — redisco",
+    "tags": [
+      "rag",
+      "retrieval-augmented-generation",
+      "agentic-ai",
+      "llm"
+    ],
+    "path": "Wiki/RAG.md"
+  },
+  {
+    "title": "Raw-Wiki-Schema Architecture",
+    "slug": "raw-wiki-schema-architecture",
+    "summary": "The three-layer structural foundation of an LLM Wiki: Raw (immutable source documents), Wiki (LLM-generated compiled knowledge notes), and Schema (the agent contract defining conventions, rules, and w",
+    "tags": [
+      "architecture",
+      "llm-wiki",
+      "system-design"
+    ],
+    "path": "Wiki/Raw-Wiki-Schema-Architecture.md"
+  },
+  {
+    "title": "Software Architecture",
+    "slug": "software-architecture",
+    "summary": "Software Architecture is the set of structures needed to reason about a software system, comprising software elements, relations among them, and properties of both.",
+    "tags": [
+      "concept",
+      "architecture",
+      "system-design"
+    ],
+    "path": "Wiki/Software-Architecture.md"
+  },
+  {
+    "title": "Starlette",
+    "slug": "starlette",
+    "summary": "Starlette is a lightweight ASGI web toolkit for Python that provides the web layer (routing, middleware, WebSockets, CORS) underlying FastAPI.",
+    "tags": [
+      "python",
+      "asgi",
+      "web-toolkit",
+      "async"
+    ],
+    "path": "Wiki/Starlette.md"
+  },
+  {
+    "title": "Uvicorn",
+    "slug": "uvicorn",
+    "summary": "Uvicorn is a high-performance ASGI server for Python used to run FastAPI and Starlette applications, optionally with uvloop for maximum throughput.",
+    "tags": [
+      "python",
+      "asgi",
+      "server",
+      "async"
+    ],
+    "path": "Wiki/Uvicorn.md"
+  },
+  {
+    "title": "Wanderloots",
+    "slug": "wanderloots",
+    "summary": "Callum (Wanderloots) is a content creator, former intellectual property lawyer, and digital gardener who popularised the LLM Wiki pattern for Obsidian through a two-part YouTube series and an accompan",
+    "tags": [
+      "entity",
+      "creator",
+      "author"
+    ],
+    "path": "Wiki/Wanderloots.md"
+  }
+]

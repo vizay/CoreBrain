@@ -76,6 +76,21 @@ does not exist yet, create the Wiki note first, run `build`, then add the refere
 
 ---
 
+## Rule 6 — CoreBrain Hub Access
+
+> **Consume the CoreBrain via the static hub cache; never attempt to write to it.**
+
+Spoke agents must query universal knowledge using `search-hub` against the locally cached `Schema/hub-cache/catalog.json`. This ensures the CoreBrain acts as a secure, read-only external dependency.
+
+If the results seem stale, run:
+```bash
+python scripts/wiki_tool.py refresh-hub
+```
+
+Agents must **never** attempt to clone, checkout, or write directly to the CoreBrain repository from a spoke context.
+
+---
+
 ## Enforcement
 
 | Check | Enforced By |
@@ -85,3 +100,4 @@ does not exist yet, create the Wiki note first, run `build`, then add the refere
 | Catalog queried first | Agent self-discipline + skill prompt |
 | Clean lint before commit | `wiki_tool.py lint` (pre-commit gate) |
 | `[[Core: ...]]` format | `wiki_tool.py lint` (regex + catalog check) |
+| Read-only CoreBrain access | Structural HTML/JSON distribution |
