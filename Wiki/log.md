@@ -94,3 +94,9 @@ Created Wiki/ADR-Template-Engine-Strategy.md, Wiki/ADR-Git-Hygiene-and-Version-C
 
 ---
 
+## 2026-07-20T00:13:04Z — Ingested: ADR - Read-Only Firewalling for CoreBrain Hub
+
+Updated wiki note: ADR-Read-Only-Firewalling.md. Source: Raw/Sources/ADR - Read-Only Firewalling for CoreBrain Hub.md
+
+---
+
