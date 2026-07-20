@@ -8,7 +8,6 @@ created: 2026-07-19
 description: "The Concerned Architect (Agile Architecting): DONE-Done for ADs (ecADR)"
 tags:
   - "clippings"
-processed: true
 ---
 ![ZIO](https://www.ozimmer.ch/assets/images/olzzio.jpg)
 

@@ -8,7 +8,6 @@ created: 2026-07-19
 description: "The following UML class diagram shows that many templates for ADR capturing exist, including (but not limited to) MADR, Nygardian ADRs, and Y-Statements:"
 tags:
   - "clippings"
-processed: true
 ---
 The following UML class diagram shows that many templates for ADR capturing exist, including (but not limited to) MADR, Nygardian ADRs, and Y-Statements:
 

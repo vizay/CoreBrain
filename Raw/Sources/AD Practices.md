@@ -8,7 +8,6 @@ created: 2026-07-19
 description: "The lists on this page point at ADR capturing practices and related advice but do not necessarily endorse all of them."
 tags:
   - "clippings"
-processed: true
 ---
 > The lists on this page point at ADR capturing practices and related advice but do not necessarily endorse all of them.
 

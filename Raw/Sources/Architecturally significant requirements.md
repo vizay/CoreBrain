@@ -8,7 +8,6 @@ created: 2026-07-19
 description:
 tags:
   - "clippings"
-processed: true
 ---
 **Architecturally significant requirements** are those requirements that have a measurable effect on a computer system’s [architecture](https://en.wikipedia.org/wiki/Software_architecture "Software architecture").[^1] This can comprise both software and hardware requirements. They are a subset of [requirements](https://en.wikipedia.org/wiki/Software_requirement "Software requirement") that affect a system architecture in measurably identifiable ways.
 

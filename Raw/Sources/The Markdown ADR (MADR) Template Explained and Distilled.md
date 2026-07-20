@@ -8,7 +8,6 @@ created: 2026-07-19
 description: "Markdown ADR 4.0 Full and Minimal Templates, YADR Sibling"
 tags:
   - "clippings"
-processed: true
 ---
 ![ZIO](https://www.ozimmer.ch/assets/images/olzzio.jpg)
 

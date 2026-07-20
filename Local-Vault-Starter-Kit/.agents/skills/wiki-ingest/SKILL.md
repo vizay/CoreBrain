@@ -25,13 +25,13 @@ Follow these steps **in order**. Do not skip any step.
 
 ### Step 1 — Identify Unprocessed Sources
 
-Scan `Raw/Sources/` for files where the frontmatter field `processed: false`.
-List each unprocessed file to the user before proceeding.
+Run the following command to find raw sources that have not yet been cited in the Wiki:
 
 ```bash
-# Enumerate all raw sources (read-only scan)
-# Check each file's YAML frontmatter for: processed: false
+python scripts/wiki_tool.py list-unprocessed
 ```
+
+List each unprocessed file to the user before proceeding.
 
 ### Step 2 — Query Existing Wiki Knowledge
 
@@ -75,14 +75,8 @@ summary: "One sentence summary."
 
 ### Step 5 — Mark Source as Processed
 
-After all concepts are extracted, update the source file's frontmatter:
-
-```
-processed: true
-```
-
-> ⚠️ This is the ONLY permitted modification to a file in `Raw/Sources/`. Do not alter
-> any other content. See AGENTS.md Rule 1.
+A source is automatically considered "processed" as soon as it is cited in the `sources` array of a compiled Wiki note.
+You do **not** need to modify the raw source file. In fact, `Raw/Sources/` files must remain strictly immutable (see AGENTS.md Rule 1).
 
 ### Step 6 — Rebuild the Catalog
 

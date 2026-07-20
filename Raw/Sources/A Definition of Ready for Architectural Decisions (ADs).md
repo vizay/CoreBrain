@@ -8,7 +8,6 @@ created: 2026-07-19
 description: "The Concerned Architect (Agile Architecting): AD DoR, LRM/MRM"
 tags:
   - "clippings"
-processed: true
 ---
 ![ZIO](https://ozimmer.ch/assets/images/olzzio.jpg)
 

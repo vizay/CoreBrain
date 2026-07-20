@@ -3,7 +3,6 @@ title: "ADR - Read-Only Firewalling for CoreBrain Hub"
 description: "Architectural Decision Record regarding the restriction of agent write access to the CoreBrain hub from spoke vaults."
 tags:
   - "clippings"
-processed: true
 ---
 
 # ADR - Read-Only Firewalling for CoreBrain Hub

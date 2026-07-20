@@ -8,7 +8,6 @@ created: 2026-07-19
 description: "How do I build a LLM Wiki? How can I future proof my knowledge systems for both myself and for AI, so I don't lose work, ideas, and knowledge between tools? The solution: a custom wiki, one that gets"
 tags:
   - "clippings"
-processed: true
 ---
 ![](https://www.youtube.com/watch?v=QbjAQFJJyt0)
 

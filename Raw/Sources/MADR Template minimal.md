@@ -7,7 +7,6 @@ created: 2026-07-19
 description:
 tags:
   - "clippings"
-processed: true
 ---
 ```
 # {short title, representative of solved problem and found solution}

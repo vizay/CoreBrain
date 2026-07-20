@@ -7,7 +7,6 @@ created: 2026-07-19
 description: "A place for resources to complement my YouTube tutorials & writing - vibe-coding/wanderloots-llm-wiki-core-setup-v1.0.0.md at main · wanderloots-tutorials/vibe-coding"
 tags:
   - "clippings"
-processed: true
 ---
 ## LLM Wiki Core Setup Guide For Agents
 
@@ -172,7 +171,6 @@ Reference: ""
 ContentType:
   - "markdown"
 Created: YYYY-MM-DD
-Processed: false
 tags:
   - "source"
 ---
@@ -286,7 +284,6 @@ Reference: "owned-demo"
 ContentType:
   - "markdown"
 Created: YYYY-MM-DD
-Processed: false
 tags:
   - "source"
 ---

@@ -8,7 +8,6 @@ created: 2026-07-19
 description: "llm-wiki. GitHub Gist: instantly share code, notes, and snippets."
 tags:
   - "clippings"
-processed: true
 ---
 ## LLM Wiki
 

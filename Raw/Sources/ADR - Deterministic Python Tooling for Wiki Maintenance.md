@@ -3,7 +3,6 @@ title: "ADR - Deterministic Python Tooling for Wiki Maintenance"
 description: "Architectural Decision Record regarding the use of deterministic Python tooling to maintain the LLM Wiki schema."
 tags:
   - "clippings"
-processed: true
 ---
 
 # ADR - Deterministic Python Tooling for Wiki Maintenance

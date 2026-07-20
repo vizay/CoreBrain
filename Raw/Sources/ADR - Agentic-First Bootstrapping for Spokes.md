@@ -4,7 +4,6 @@ tags:
   - "architecture"
   - "spoke"
   - "bootstrapping"
-processed: true
 ---
 
 # ADR - Agentic-First Bootstrapping for Spokes

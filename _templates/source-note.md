@@ -4,7 +4,6 @@ author: "{{AUTHOR}}"
 url: "{{URL}}"
 source_type: "{{TYPE}}"  # e.g. paper, article, book, video, website
 ingested_date: "{{YYYY-MM-DD}}"
-processed: false
 tags:
   - source
   - "{{TAG_1}}"
@@ -22,7 +21,6 @@ notes: ""
 | Author / Origin | {{AUTHOR}} |
 | URL / Reference | {{URL}} |
 | Ingested | {{YYYY-MM-DD}} |
-| Processed | `false` |
 
 ## Raw Content
 

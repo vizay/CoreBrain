@@ -12,6 +12,8 @@ All agents, automated scripts, and human contributors must comply.
 Files in `Raw/Sources/` are ground-truth artifacts. They represent the original,
 unprocessed inputs to the knowledge pipeline. Any transformation, synthesis, or
 summarization must produce output in `Wiki/` — the source file must remain untouched.
+**Processing state is tracked dynamically**: a file is "processed" if it is cited in
+the `sources` array of any compiled Wiki note.
 
 If a source needs to be updated, add a new versioned file alongside the original.
 

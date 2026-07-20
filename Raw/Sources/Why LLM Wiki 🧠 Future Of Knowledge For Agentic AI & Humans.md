@@ -8,7 +8,6 @@ created: 2026-07-19
 description: "Why do we need a LLM wiki? What is the future of shared knowledge between AI & Humans? In today's video, I explore how building a shared memory layer for EVERY AI tool can benefit both your human & AI"
 tags:
   - "clippings"
-processed: true
 ---
 ![](https://www.youtube.com/watch?v=n4EVksU_EOs)
 

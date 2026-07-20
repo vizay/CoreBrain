@@ -3,7 +3,6 @@ title: "CoreBrain Architecture Master Document"
 description: "The top-level Map of Content (MoC) and Whitepaper detailing the design, topology, and 7 pillars of the CoreBrain LLM Wiki."
 tags:
   - "clippings"
-processed: true
 ---
 
 # CoreBrain Architecture Master Document

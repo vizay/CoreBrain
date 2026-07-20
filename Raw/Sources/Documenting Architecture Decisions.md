@@ -8,7 +8,6 @@ created: 2026-07-19
 description: "Take a moment and think of a big architectural decision you made in your last project. That one point were you started just with the problem description and had to choose either to go one way to solve it or the other. That was a tough decision to make, right?Now, can you know show me based on what facts, criteria and opinions that decision was made? Who was actually involved in making that decision? From a retrospective point of view, wouldn’t it now be really helpful to go through that decision again and see how it turned out in the end? Did the architects anticipate the pain points experienced later on in the project? Were they unforeseeable based on the knowledge present at the decision point? How could those decisions be improved in the future?"
 tags:
   - "clippings"
-processed: true
 ---
 Take a moment and think of a big architectural decision you made in your last project. That one point were you started just with the problem description and had to choose either to go one way to solve it or the other. That was a tough decision to make, right?
 

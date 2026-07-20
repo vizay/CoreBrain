@@ -8,7 +8,6 @@ created: 2026-07-19
 description: "How to assure the quality of the design decisions that make or break your project"
 tags:
   - "clippings"
-processed: true
 ---
 ![ZIO](https://www.ozimmer.ch/assets/images/olzzio.jpg)
 

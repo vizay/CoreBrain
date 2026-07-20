@@ -8,7 +8,6 @@ created: 2026-07-19
 description:
 tags:
   - "clippings"
-processed: true
 ---
 In [software engineering](https://en.wikipedia.org/wiki/Software_engineering "Software engineering") and [software architecture](https://en.wikipedia.org/wiki/Software_architecture "Software architecture") design, **architectural decisions** are design decisions that address [architecturally significant requirements](https://en.wikipedia.org/wiki/Architecturally_significant_requirements "Architecturally significant requirements"); they are perceived as hard to make [^1] and/or costly to change.[^2]
 

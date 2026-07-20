@@ -323,6 +323,39 @@ def cmd_search_catalog(args) -> int:
 
 
 # ---------------------------------------------------------------------------
+# Command: list-unprocessed
+# ---------------------------------------------------------------------------
+def cmd_list_unprocessed(args) -> int:
+    """List files in Raw/Sources that are not cited in any Wiki note."""
+    if not RAW_SOURCES_DIR.exists():
+        return 0
+
+    cited = set()
+    for p in WIKI_DIR.rglob("*.md"):
+        text = p.read_text(encoding="utf-8-sig", errors="replace")
+        fm = _parse_frontmatter(text)
+        if fm and "sources" in fm:
+            sources = fm["sources"]
+            if isinstance(sources, str):
+                sources = [sources]
+            for s in sources:
+                cited.add(s)
+                cited.add(Path(s).name)
+
+    unprocessed = set()
+    for p in RAW_SOURCES_DIR.rglob("*"):
+        if p.is_file():
+            rel_path = p.relative_to(VAULT_ROOT).as_posix()
+            basename = p.name
+            if rel_path not in cited and basename not in cited:
+                unprocessed.add(rel_path)
+
+    for uncited in sorted(unprocessed):
+        print(uncited)
+    return 0
+
+
+# ---------------------------------------------------------------------------
 # Command: log
 # ---------------------------------------------------------------------------
 def cmd_log(args) -> int:
@@ -523,6 +556,9 @@ def main() -> int:
     sp_log.add_argument("--action", required=True, help="Short action title")
     sp_log.add_argument("--details", default="", help="Additional details")
 
+    # list-unprocessed
+    subparsers.add_parser("list-unprocessed", help="List files in Raw/Sources that are not cited in any Wiki note")
+
     # refresh-hub
     subparsers.add_parser("refresh-hub", help="Download the latest CoreBrain catalog")
 
@@ -539,6 +575,7 @@ def main() -> int:
         "build": cmd_build,
         "lint": cmd_lint,
         "search-catalog": cmd_search_catalog,
+        "list-unprocessed": cmd_list_unprocessed,
         "log": cmd_log,
         "refresh-hub": cmd_refresh_hub,
         "search-hub": cmd_search_hub,

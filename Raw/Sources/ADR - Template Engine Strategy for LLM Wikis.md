@@ -3,7 +3,6 @@ title: "ADR - Template Engine Strategy for LLM Wikis"
 description: "Architectural Decision Record regarding the use of standardized templates as an immutable blueprint for agent-generated wiki nodes."
 tags:
   - "clippings"
-processed: true
 ---
 
 # ADR - Template Engine Strategy for LLM Wikis

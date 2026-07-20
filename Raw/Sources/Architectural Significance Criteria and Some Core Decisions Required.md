@@ -8,7 +8,6 @@ created: 2026-07-19
 description: "From AppArch Lecture and ECSA Working Session"
 tags:
   - "clippings"
-processed: true
 ---
 ![ZIO](https://www.ozimmer.ch/assets/images/olzzio.jpg)
 

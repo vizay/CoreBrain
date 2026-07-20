@@ -8,7 +8,6 @@ created: 2026-07-19
 description:
 tags:
   - "clippings"
-processed: true
 ---
 ![](https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Oversimplified_Structure_of_the_Linux_kernel.svg/250px-Oversimplified_Structure_of_the_Linux_kernel.svg.png)
 

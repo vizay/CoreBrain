@@ -7,7 +7,6 @@ created: 2026-07-19
 description: "FastAPI framework, high performance, easy to learn, fast to code, ready for production"
 tags:
   - "clippings"
-processed: true
 ---
 ## FastAPI
 

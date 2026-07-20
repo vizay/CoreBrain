@@ -3,7 +3,6 @@ title: "ADR - Project-Scoped Agent Skills and Rules"
 description: "Architectural Decision Record regarding the use of an .agents directory to store executable workflow skills and global rules."
 tags:
   - "clippings"
-processed: true
 ---
 
 # ADR - Project-Scoped Agent Skills and Rules

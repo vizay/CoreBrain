@@ -3,7 +3,6 @@ title: "ADR - Agent Pointer Routing via .agents directory"
 description: "Architectural Decision Record regarding the use of pointer files to route agent configuration from local environments to centralized schemas."
 tags:
   - "clippings"
-processed: true
 ---
 
 # ADR - Agent Pointer Routing via .agents directory

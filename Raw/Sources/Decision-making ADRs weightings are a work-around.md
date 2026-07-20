@@ -7,7 +7,6 @@ created: 2026-07-19
 description: "When defining criteria for your decision-making   Architecture Decision Records (ADRs) you should avoid mixing levels of abstraction. Even when applying a modern and agile architecture technique such as ADRs, you will not get the desired effect if you do not take care in its execution."
 tags:
   - "clippings"
-processed: true
 ---
 When defining criteria for your decision-making [Architecture Decision Records (ADRs)](https://jacquiread.com/knowledge/adrs/ "Architecture Decision Records (ADRs)") you should avoid mixing levels of abstraction. Even when applying a modern and agile architecture technique such as ADRs, you will not get the desired effect if you do not take care in its execution.
 

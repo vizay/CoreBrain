@@ -3,7 +3,6 @@ title: "ADR - Local Vault Starter Kit for Spoke Generation"
 description: "Architectural Decision Record regarding the use of a distributable starter kit for spawning new project spoke vaults."
 tags:
   - "clippings"
-processed: true
 ---
 
 # ADR - Local Vault Starter Kit for Spoke Generation

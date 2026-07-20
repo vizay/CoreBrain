@@ -8,7 +8,6 @@ created: 2026-07-19
 description: "Five levels and seven dimensions to assess ADR practices"
 tags:
   - "clippings"
-processed: true
 ---
 ![Olaf Zimmermann and Mohsen Anvari](https://ozimmer.ch/assets/images/MAOZ.png)
 

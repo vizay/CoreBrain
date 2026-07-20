@@ -3,7 +3,6 @@ title: "ADR - Git Hygiene and Version Control for Local Vaults"
 description: "Architectural Decision Record regarding the untracking of IDE-specific UI states and ephemeral agent scratchpads in version control."
 tags:
   - "clippings"
-processed: true
 ---
 
 # ADR - Git Hygiene and Version Control for Local Vaults
