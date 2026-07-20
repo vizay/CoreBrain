@@ -515,7 +515,7 @@ def cmd_build_site(args) -> int:
                     zipf.write(file_path, arcname)
                     
     # 2. Generate bootstrap.md
-    python_script = f'''import urllib.request
+    python_script = '''import urllib.request
 import zipfile
 import tempfile
 import pathlib
@@ -524,11 +524,15 @@ import os
 import subprocess
 import sys
 
-HUB_URL = "{hub_url}"
-ZIP_URL = f"{{HUB_URL}}/spoke-starter.zip"
+if len(sys.argv) < 2:
+    print("Usage: python init_spoke.py <HUB_BASE_URL>")
+    sys.exit(1)
 
-print(f"Downloading spoke-starter.zip from {{ZIP_URL}}...")
-req = urllib.request.Request(ZIP_URL, headers={{'User-Agent': 'Mozilla/5.0'}})
+HUB_URL = sys.argv[1].rstrip("/")
+ZIP_URL = f"{HUB_URL}/spoke-starter.zip"
+
+print(f"Downloading spoke-starter.zip from {ZIP_URL}...")
+req = urllib.request.Request(ZIP_URL, headers={'User-Agent': 'Mozilla/5.0'})
 with urllib.request.urlopen(req) as response:
     zip_data = response.read()
 
@@ -573,19 +577,21 @@ print("Spoke initialization complete!")
 
 You are an agentic AI initializing a CoreBrain Spoke in the user's repository. Follow these steps exactly:
 
-1. Save the following python script to a temporary file named `init_spoke.py` in the root of the project:
+1. Identify the base URL of this very `bootstrap.md` file you are currently reading. For example, if you read this from `https://example.com/bootstrap.md`, the base URL is `https://example.com`.
+
+2. Save the following python script to a temporary file named `init_spoke.py` in the root of the project:
 ```python
 {python_script}
 ```
 
-2. Execute the script:
+3. Execute the script, passing the base URL as an argument:
 ```bash
-python init_spoke.py
+python init_spoke.py <BASE_URL>
 ```
 
-3. Delete `init_spoke.py` after it finishes successfully.
+4. Delete `init_spoke.py` after it finishes successfully.
 
-4. Inform the user that the Spoke is successfully initialized, the catalog has been downloaded, and you are ready to work.
+5. Inform the user that the Spoke is successfully initialized, the catalog has been downloaded, and you are ready to work.
 """
     (SITE_DIR / "bootstrap.md").write_text(bootstrap_content, encoding="utf-8")
         
