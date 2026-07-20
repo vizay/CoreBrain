@@ -498,7 +498,7 @@ def cmd_build_site(args) -> int:
         json.dump(catalog_entries, f, ensure_ascii=False, indent=2)
         
     # --- Agentic First Bootstrapping Generation ---
-    hub_url = args.url.rstrip('/') if args.url else "https://vizay.github.io/CoreBrain"
+    hub_url = args.url.rstrip('/')
     
     # 1. Package the Starter Kit into spoke-starter.zip
     import zipfile
@@ -626,7 +626,7 @@ def main() -> int:
 
     # build-site
     sp_build_site = subparsers.add_parser("build-site", help="Compile Wiki/ into static HTML in site/")
-    sp_build_site.add_argument("--url", help="The GitHub Pages URL where the hub is hosted")
+    sp_build_site.add_argument("--url", required=True, help="The GitHub Pages URL where the hub is hosted")
 
     args = parser.parse_args()
 
