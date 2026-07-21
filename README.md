@@ -9,7 +9,8 @@
 
 **CoreBrain** is a structured, distributed, agent-friendly knowledge base designed to serve as a persistent memory layer for Agentic AI development. When working with AI coding assistants (like Antigravity, Cursor, or Devin), context windows often get bloated, and AI agents frequently forget overarching architectural decisions, syntax preferences, or global project rules.
 
-CoreBrain solves this by implementing an **LLM Wiki**: a knowledge management system where raw, immutable source materials are synthesized into dense, interconnected markdown notes by the AI itself. This enables your AI agents to query, learn, and abide by a unified set of rules and architectural decisions across any number of projects.
+CoreBrain solves this by implementing an **LLM Wiki**: a knowledge management system where raw, immutable source materials are synthesized into dense, interconnected markdown notes by the AI itself. This architecture is a direct derivative of [Andrej Karpathy's LLM Wiki concept](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f), enabling your AI agents to query, learn, and abide by a unified set of rules and architectural decisions across any number of projects.
+
 
 ### 💖 Acknowledgements
 A massive and appreciative thank you to the YouTuber and creator **[Wanderloots](https://www.youtube.com/@Wanderloots)**. His videos and pioneering concepts on "vibe-coding" and the LLM Wiki were the direct inspiration and foundational blueprint for this entire project. 
