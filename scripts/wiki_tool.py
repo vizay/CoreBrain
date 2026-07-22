@@ -7,14 +7,20 @@ Commands:
   lint            Validate all Wiki/ .md files (frontmatter, tags, sources, Core refs)
   search-catalog  Search catalog.jsonl with --query
   log             Append a timestamped entry to Wiki/log.md
+  refresh-hub     Download the latest catalog from the Hub (Spokes only)
+  search-hub      Search the Hub's catalog.jsonl (Spokes only)
+  upgrade-tooling Download the latest scripts and skills from the Hub (Spokes only)
 
 Usage:
   python scripts/wiki_tool.py build
   python scripts/wiki_tool.py lint
   python scripts/wiki_tool.py search-catalog --query "transformer"
   python scripts/wiki_tool.py log --action "Ingested GPT-4 paper" --details "Added 3 wiki notes"
+  python scripts/wiki_tool.py refresh-hub
+  python scripts/wiki_tool.py search-hub --query "api"
+  python scripts/wiki_tool.py upgrade-tooling
 
-Dependencies: Python 3.8+ standard library only (os, json, argparse, re, pathlib, datetime).
+Dependencies: Python 3.10+ standard library only (os, json, argparse, re, pathlib, datetime, urllib, zipfile, tempfile).
 """
 
 import os
@@ -24,6 +30,10 @@ import re
 import sys
 from pathlib import Path
 from datetime import datetime, timezone
+import urllib.request
+import zipfile
+import tempfile
+import shutil
 
 # ---------------------------------------------------------------------------
 # Path anchors — all paths are relative to the vault root (parent of scripts/)
@@ -59,8 +69,9 @@ def _parse_frontmatter(text: str) -> dict | None:
         if not line.strip() or line.strip().startswith("#"):
             continue
         # List item
-        if line.startswith("  - ") or line.startswith("- "):
-            item = line.strip().lstrip("- ").strip().strip('"').strip("'")
+        stripped_line = line.lstrip()
+        if stripped_line.startswith("- "):
+            item = stripped_line[2:].split("#")[0].strip().strip('"').strip("'")
             if current_key is not None:
                 if not isinstance(result.get(current_key), list):
                     result[current_key] = []
@@ -70,13 +81,14 @@ def _parse_frontmatter(text: str) -> dict | None:
         if ":" in line:
             key, _, value = line.partition(":")
             key = key.strip()
-            value = value.strip().strip('"').strip("'")
+            value = value.split("#")[0].strip().strip('"').strip("'")
             current_key = key
-            list_mode = value == ""
-            if not list_mode:
-                result[key] = value
-            else:
+            if value == "":
                 result[key] = []
+                list_mode = True
+            else:
+                result[key] = value
+                list_mode = False
     return result
 
 
@@ -103,7 +115,6 @@ def cmd_build(args) -> int:
     WIKI_DIR.mkdir(parents=True, exist_ok=True)
     entries = []
     md_files = sorted(WIKI_DIR.rglob("*.md"))
-    skipped = []
     for path in md_files:
         # Skip the log file itself
         if path.name == "log.md":
@@ -132,9 +143,7 @@ def cmd_build(args) -> int:
             f.write(json.dumps(entry, ensure_ascii=False) + "\n")
 
     print(f"[build] Catalogued {len(entries)} notes -> {CATALOG_FILE.relative_to(VAULT_ROOT)}")
-    if skipped:
-        for s in skipped:
-            print(f"  [skip] {s}")
+
     return 0
 
 
@@ -163,6 +172,8 @@ def cmd_lint(args) -> int:
                             catalog_stems.add(Path(entry["path"]).stem)
                     except json.JSONDecodeError:
                         pass
+
+    catalog_exists = CATALOG_FILE.exists()
 
     # Collect all raw source filenames for citation validation
     raw_source_files: set[str] = set()
@@ -226,7 +237,11 @@ def cmd_lint(args) -> int:
             )
 
         # 5b. Warn when a [[Concept]] link doesn't resolve to a known catalog title
-        if catalog_titles or catalog_stems:
+        if not catalog_exists:
+            # We don't want to flood warnings if there's no catalog yet.
+            if rel == md_files[-1].relative_to(VAULT_ROOT).as_posix():
+                warnings.append("Cannot validate [[Concept]] links fully because catalog.jsonl is missing. Run `build` first.")
+        else:
             for link_match in WIKI_LINK_RE.finditer(text):
                 concept = link_match.group(1).strip()
                 # Skip empty, relative path links, and external URLs
@@ -431,12 +446,12 @@ def _simple_md_to_html(md_text: str, catalog_titles: set) -> str:
     def link_repl(match):
         concept = match.group(1).strip()
         slug = _slugify(concept)
-        return f'<a href="{slug}.html">{html.escape(concept)}</a>'
+        return f'<a href="{html.escape(slug)}.html">{html.escape(concept)}</a>'
         
     html_text = re.sub(r"\[\[([^\]|#]+?)(?:[|#][^\]]*)?\]\]", link_repl, html_text)
     
     # Process standard links [Text](url)
-    html_text = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", lambda m: f'<a href="{m.group(2)}">{m.group(1)}</a>', html_text)
+    html_text = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", lambda m: f'<a href="{html.escape(m.group(2))}">{html.escape(m.group(1))}</a>', html_text)
     
     return html_text
 
@@ -632,6 +647,131 @@ python init_spoke.py <BASE_URL>
     print(f"[build-site] Generated spoke-starter.zip and bootstrap.md using HUB_URL={hub_url}")
     return 0
 
+
+
+# ---------------------------------------------------------------------------
+# Spoke Commands (refresh-hub, search-hub, upgrade-tooling)
+# ---------------------------------------------------------------------------
+def _get_hub_url() -> str:
+    config_path = VAULT_ROOT / "Schema" / "hub-config.json"
+    if not config_path.exists():
+        print("Error: Schema/hub-config.json not found. This command is for Spokes only.", file=sys.stderr)
+        sys.exit(1)
+    with config_path.open() as f:
+        data = json.load(f)
+    return data.get("hub_pages_url", "").rstrip("/")
+
+def cmd_refresh_hub(args) -> int:
+    """Download the latest catalog from the Hub."""
+    hub_url = _get_hub_url()
+    catalog_url = f"{hub_url}/catalog.json"
+    print(f"[refresh-hub] Fetching global catalog from {catalog_url}...")
+    
+    req = urllib.request.Request(catalog_url, headers={'User-Agent': 'Mozilla/5.0'})
+    try:
+        with urllib.request.urlopen(req) as response:
+            data = json.loads(response.read().decode("utf-8"))
+    except Exception as e:
+        print(f"Failed to download catalog: {e}", file=sys.stderr)
+        return 1
+        
+    WIKI_DIR.mkdir(parents=True, exist_ok=True)
+    hub_catalog = WIKI_DIR / "hub_catalog.jsonl"
+    with hub_catalog.open("w", encoding="utf-8") as f:
+        for entry in data:
+            f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+            
+    print(f"[refresh-hub] Successfully saved {len(data)} global notes to Wiki/hub_catalog.jsonl.")
+    return 0
+
+def cmd_search_hub(args) -> int:
+    """Search the Hub's catalog.jsonl with --query."""
+    hub_catalog = WIKI_DIR / "hub_catalog.jsonl"
+    if not hub_catalog.exists():
+        print("[search-hub] hub_catalog.jsonl not found. Run `refresh-hub` first.", file=sys.stderr)
+        return 1
+
+    query = args.query.lower()
+    tokens = query.split()
+    results = []
+
+    with hub_catalog.open(encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line: continue
+            try:
+                entry = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            haystack = " ".join([
+                entry.get("title", ""),
+                entry.get("summary", ""),
+                " ".join(entry.get("tags", [])),
+            ]).lower()
+            score = sum(1 for token in tokens if token in haystack)
+            if score > 0:
+                results.append((score, entry))
+
+    results.sort(key=lambda x: x[0], reverse=True)
+
+    if not results:
+        print(f"[search-hub] No results for query: '{args.query}'")
+        return 0
+
+    print(f"[search-hub] {len(results)} result(s) for '{args.query}':\n")
+    for rank, (score, entry) in enumerate(results, 1):
+        print(f"  [{rank}] {entry.get('title', '(no title)')}")
+        print(f"       Summary : {entry.get('summary', '')[:120]}")
+        print(f"       Tags    : {', '.join(entry.get('tags', []))}")
+        print()
+    return 0
+
+def cmd_upgrade_tooling(args) -> int:
+    """Download the latest scripts and skills from the Hub."""
+    hub_url = _get_hub_url()
+    zip_url = f"{hub_url}/spoke-starter.zip"
+    print(f"[upgrade-tooling] Fetching spoke-starter.zip from {zip_url}...")
+    
+    req = urllib.request.Request(zip_url, headers={'User-Agent': 'Mozilla/5.0'})
+    try:
+        with urllib.request.urlopen(req) as response:
+            zip_data = response.read()
+    except Exception as e:
+        print(f"Failed to download toolkit: {e}", file=sys.stderr)
+        return 1
+        
+    with tempfile.TemporaryDirectory() as tmpdir:
+        zip_path = Path(tmpdir) / "spoke-starter.zip"
+        zip_path.write_bytes(zip_data)
+        
+        extract_dir = Path(tmpdir) / "extracted"
+        with zipfile.ZipFile(zip_path, 'r') as z:
+            z.extractall(extract_dir)
+            
+        # 1. Overwrite scripts/wiki_tool.py
+        src_script = extract_dir / "scripts" / "wiki_tool.py"
+        dst_script = VAULT_ROOT / "scripts" / "wiki_tool.py"
+        if src_script.exists():
+            shutil.copy2(src_script, dst_script)
+            print("[upgrade-tooling] Updated scripts/wiki_tool.py")
+            
+        # 2. Overwrite .agents/skills/
+        src_skills = extract_dir / ".agents" / "skills"
+        dst_skills = VAULT_ROOT / ".agents" / "skills"
+        if src_skills.exists():
+            dst_skills.mkdir(parents=True, exist_ok=True)
+            # Copy all skills from src to dst, overwriting existing
+            for item in src_skills.iterdir():
+                if item.is_dir():
+                    dst_item = dst_skills / item.name
+                    if dst_item.exists():
+                        shutil.rmtree(dst_item)
+                    shutil.copytree(item, dst_item)
+            print("[upgrade-tooling] Updated .agents/skills/")
+            
+    print("[upgrade-tooling] Upgrade complete!")
+    return 0
+
 # ---------------------------------------------------------------------------
 # CLI entry point
 # ---------------------------------------------------------------------------
@@ -664,6 +804,16 @@ def main() -> int:
     sp_build_site = subparsers.add_parser("build-site", help="Compile Wiki/ into static HTML in site/")
     sp_build_site.add_argument("--url", required=True, help="The GitHub Pages URL where the hub is hosted")
 
+    # refresh-hub
+    subparsers.add_parser("refresh-hub", help="Download the latest catalog from the Hub (Spokes only)")
+
+    # search-hub
+    sp_search_hub = subparsers.add_parser("search-hub", help="Search the Hub's catalog.jsonl (Spokes only)")
+    sp_search_hub.add_argument("--query", required=True, help="Search query string")
+
+    # upgrade-tooling
+    subparsers.add_parser("upgrade-tooling", help="Download the latest scripts and skills from the Hub (Spokes only)")
+
     args = parser.parse_args()
 
     dispatch = {
@@ -673,6 +823,9 @@ def main() -> int:
         "list-unprocessed": cmd_list_unprocessed,
         "log": cmd_log,
         "build-site": cmd_build_site,
+        "refresh-hub": cmd_refresh_hub,
+        "search-hub": cmd_search_hub,
+        "upgrade-tooling": cmd_upgrade_tooling,
     }
     return dispatch[args.command](args)
 

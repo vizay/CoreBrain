@@ -34,7 +34,7 @@ This design ensures that when you update a global rule in your CoreBrain, all of
 Before setting up CoreBrain, ensure you have the following installed:
 
 - **Obsidian**: The primary visual interface for reading, organizing, and navigating your markdown knowledge graph.
-- **Python 3.8+**: Required for the `wiki_tool.py` deterministic engine. (No external dependencies; it uses only the standard library).
+- **Python 3.10+**: Required for the `wiki_tool.py` deterministic engine. (No external dependencies; it uses only the standard library).
 - **Git**: Required for version control, pre-commit hooks, and syncing Spoke repositories with Hub updates.
 - **An Agentic AI Environment**: An AI assistant capable of running terminal commands and reading/writing files (e.g., Antigravity, Cursor, Devin).
 - **Obsidian Web Clipper** *(Highly Recommended)*: A browser extension used to seamlessly clip documentation and articles into raw markdown format.
